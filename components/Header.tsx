@@ -2,12 +2,14 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import logo from "@/src/assets/logo.png";
 
 export default function Header() {
   const [active, setActive] = useState("Inicio");
   const [isOpen, setIsOpen] = useState(false);
+  const [pillStyles, setPillStyles] = useState({ left: 0, width: 0 });
+  const navRef = useRef<HTMLElement>(null);
 
   const menuItems = [
     "Inicio",
@@ -60,6 +62,28 @@ export default function Header() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // Update pill position when active element changes
+  useEffect(() => {
+    const updatePill = () => {
+      if (navRef.current) {
+        const activeElement = navRef.current.querySelector(
+          `[data-active="true"]`,
+        ) as HTMLElement;
+        if (activeElement) {
+          setPillStyles({
+            left: activeElement.offsetLeft,
+            width: activeElement.offsetWidth,
+          });
+        }
+      }
+    };
+
+    updatePill();
+    // Re-run on window resize to keep pill aligned
+    window.addEventListener("resize", updatePill);
+    return () => window.removeEventListener("resize", updatePill);
+  }, [active]);
+
   const toggleMenu = () => setIsOpen(!isOpen);
 
   return (
@@ -85,16 +109,29 @@ export default function Header() {
         </div>
 
         {/* Desktop Navigation */}
-        <nav className="hidden lg:flex items-center gap-2">
+        <nav
+          ref={navRef}
+          className="hidden lg:flex items-center gap-2 relative"
+        >
+          {/* Sliding Pill Background */}
+          <div
+            className="absolute h-10 bg-brand-blue/15 rounded-full transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)]"
+            style={{
+              left: `${pillStyles.left}px`,
+              width: `${pillStyles.width}px`,
+            }}
+          />
+
           {menuItems.map((item) => (
             <Link
               key={item}
               href={`#${normalizeId(item)}`}
               onClick={() => setActive(item)}
-              className={`px-4 py-2 rounded-full text-sm font-bold transition-all duration-300 ${
+              data-active={active === item}
+              className={`relative z-10 px-4 py-2 rounded-full text-sm font-bold transition-colors duration-300 ${
                 active === item
-                  ? "bg-brand-blue/15 text-brand-blue"
-                  : "text-zinc-500 hover:text-brand-blue hover:bg-zinc-50"
+                  ? "text-brand-blue"
+                  : "text-zinc-500 hover:text-brand-blue"
               }`}
             >
               {item}
