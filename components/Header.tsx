@@ -8,6 +8,7 @@ import logo from "@/src/assets/logo.png";
 export default function Header() {
   const [active, setActive] = useState("Inicio");
   const [isOpen, setIsOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const [pillStyles, setPillStyles] = useState({ left: 0, width: 0 });
   const navRef = useRef<HTMLElement>(null);
   const isManualScroll = useRef(false);
@@ -39,6 +40,16 @@ export default function Header() {
       isManualScroll.current = false;
     }, 1000);
   };
+
+  // Scroll detection for header effect
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 20);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   // Scroll Spy Logic
   useEffect(() => {
@@ -110,20 +121,32 @@ export default function Header() {
 
   return (
     <>
-      <header className="fixed top-0 left-0 right-0 z-50 px-6 py-4 bg-white/90 backdrop-blur-xl md:px-16 flex items-center justify-between shadow-sm border-b border-zinc-100/50">
+      <header
+        className={`fixed top-0 left-0 right-0 z-50 px-6 md:px-16 flex items-center justify-between transition-all duration-500 ${
+          scrolled
+            ? "py-3 bg-white/70 backdrop-blur-2xl shadow-lg shadow-zinc-200/20 border-b border-zinc-200/30"
+            : "py-5 bg-white/40 backdrop-blur-md border-b border-transparent"
+        }`}
+      >
         <div className="flex items-center gap-2">
           <Link
             href="#inicio"
             onClick={() => handleSetActive("Inicio")}
             className="group flex items-center gap-2 transition-opacity hover:opacity-90 cursor-pointer"
           >
-            <div className="transition-all duration-500 ease-out transform group-hover:scale-110 group-hover:-rotate-3 group-active:scale-90">
+            <div
+              className={`transition-all duration-500 ease-out transform group-hover:scale-105 ${
+                scrolled ? "" : "group-hover:-rotate-2"
+              }`}
+            >
               <Image
                 src={logo.src}
                 width={120}
                 height={60}
                 alt="Osito Mimoso Logo"
-                className="w-auto h-12 md:h-14 object-contain"
+                className={`w-auto object-contain transition-all duration-500 ${
+                  scrolled ? "h-10 md:h-11" : "h-12 md:h-14"
+                }`}
                 priority
               />
             </div>
@@ -137,7 +160,9 @@ export default function Header() {
         >
           {/* Sliding Pill Background */}
           <div
-            className="absolute h-10 bg-brand-blue/15 rounded-full transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)]"
+            className={`absolute h-10 rounded-full transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] ${
+              scrolled ? "bg-brand-blue/10 shadow-sm" : "bg-brand-blue/15"
+            }`}
             style={{
               left: `${pillStyles.left}px`,
               width: `${pillStyles.width}px`,
@@ -150,10 +175,10 @@ export default function Header() {
               href={`#${normalizeId(item)}`}
               onClick={() => handleSetActive(item)}
               data-active={active === item}
-              className={`relative z-10 px-4 py-2 rounded-full text-sm font-bold transition-colors duration-300 ${
+              className={`relative z-10 px-4 py-2 rounded-full text-sm font-semibold transition-all duration-300 ${
                 active === item
                   ? "text-brand-blue"
-                  : "text-zinc-500 hover:text-brand-blue"
+                  : "text-zinc-400 hover:text-zinc-700"
               } cursor-pointer`}
             >
               {item}
