@@ -2,6 +2,7 @@
 
 import whatsapp from "@/src/assets/whatsapp.png";
 import Image from "next/image";
+import Link from "next/link";
 
 export default function Contact() {
   const contactInfo = [
@@ -106,33 +107,63 @@ export default function Contact() {
                 .
               </p>
 
-              <div className="flex flex-col sm:flex-row items-center gap-6 mb-12">
-                {/* WhatsApp CTA - Adjusted Size */}
-                <button className="flex items-center gap-2 px-8 py-3.5 bg-[#25D366] text-white rounded-full font-bold shadow-lg shadow-green-200/50 hover:bg-[#20ba59] transition-all transform hover:-translate-y-1 hover:scale-105 active:scale-95 group/btn text-sm md:text-base cursor-pointer">
+              <div className="flex flex-col sm:flex-row items-center gap-4 mb-12">
+                {/* WhatsApp CTA */}
+                <button className="flex items-center gap-3 px-8 py-3.5 bg-[#25D366] text-white rounded-full font-bold shadow-lg shadow-green-200/50 hover:bg-[#20ba59] transition-all transform hover:-translate-y-1 hover:scale-105 active:scale-95 group/btn text-sm md:text-base cursor-pointer">
                   <Image
                     src={whatsapp.src}
                     alt="WhatsApp"
                     width={20}
                     height={20}
                   />
-                  Agendar por WhatsApp{" "}
+                  Agenda tu visita presencial
                 </button>
 
-                {/* Secondary Info */}
-                {/* <div className="flex items-center gap-4 px-8 py-4 bg-zinc-50 rounded-3xl border border-zinc-100 shadow-sm">
-                  <div className="w-10 h-10 bg-brand-gold/20 rounded-xl flex items-center justify-center text-xl">
-                    ✨
-                  </div>
-                  <div className="text-left">
-                    <p className="font-bold text-brand-text text-sm">
-                      Cita Previa
-                    </p>
-                    <p className="text-zinc-400 text-xs">
-                      Lun-Vie · 9:00 - 17:00
-                    </p>
-                  </div>
-                </div> */}
+                {/* Calendly CTA */}
+                {/* Calendly CTA */}
+                <Link
+                  href="/agendar-visita"
+                  className="flex items-center gap-3 px-8 py-3.5 bg-brand-blue text-white rounded-full font-bold shadow-lg shadow-brand-blue/20 hover:bg-brand-blue/90 transition-all transform hover:-translate-y-1 hover:scale-105 active:scale-95 text-sm md:text-base cursor-pointer"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+                    <line x1="16" y1="2" x2="16" y2="6" />
+                    <line x1="8" y1="2" x2="8" y2="6" />
+                    <line x1="3" y1="10" x2="21" y2="10" />
+                    <path d="M8 14h.01" />
+                    <path d="M12 14h.01" />
+                    <path d="M16 14h.01" />
+                    <path d="M8 18h.01" />
+                    <path d="M12 18h.01" />
+                  </svg>
+                  Reunión Virtual
+                </Link>
               </div>
+
+              {/* Secondary Info */}
+              {/* <div className="flex items-center gap-4 px-8 py-4 bg-zinc-50 rounded-3xl border border-zinc-100 shadow-sm">
+                <div className="w-10 h-10 bg-brand-gold/20 rounded-xl flex items-center justify-center text-xl">
+                  ✨
+                </div>
+                <div className="text-left">
+                  <p className="font-bold text-brand-text text-sm">
+                    Cita Previa
+                  </p>
+                  <p className="text-zinc-400 text-xs">
+                    Lun-Vie · 9:00 - 17:00
+                  </p>
+                </div>
+              </div> */}
 
               <div className="p-1 px-4 rounded-full bg-brand-blue/5 border border-brand-blue/10">
                 <p className="text-brand-blue text-[10px] md:text-xs font-bold uppercase tracking-widest">
@@ -159,6 +190,8 @@ export default function Contact() {
           </div>
         </div>
       </div>
+
+      {/* Calendly Modal Portal Removed */}
     </section>
   );
 }
