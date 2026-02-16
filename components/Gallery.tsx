@@ -96,7 +96,7 @@ export default function Gallery() {
                 activeFilter === cat
                   ? "bg-brand-blue text-white shadow-xl shadow-brand-blue/20"
                   : "bg-zinc-50 text-zinc-400 hover:bg-zinc-100"
-              }`}
+              } cursor-pointer`}
             >
               {cat}
             </button>
@@ -145,7 +145,7 @@ export default function Gallery() {
         {/* Bottom CTA */}
         <div className="mt-20 text-center">
           <p className="font-script text-2xl text-brand-brown mb-4">
-            ¡Ven a conocernos en persona!
+            ¡Te esperamos para compartir momentos únicos!
           </p>
           <div className="flex justify-center gap-3">
             <span className="w-3 h-3 rounded-full bg-brand-blue animate-bounce"></span>

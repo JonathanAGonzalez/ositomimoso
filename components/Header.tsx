@@ -58,7 +58,11 @@ export default function Header() {
         if (entry.isIntersecting) {
           const id = entry.target.id;
           const label = menuItems.find((item) => normalizeId(item) === id);
-          if (label) setActive(label);
+          if (label) {
+            setActive(label);
+            // Update URL hash without jumping
+            window.history.replaceState(null, "", `#${id}`);
+          }
         }
       });
     };
@@ -111,7 +115,7 @@ export default function Header() {
           <Link
             href="#inicio"
             onClick={() => handleSetActive("Inicio")}
-            className="group flex items-center gap-2 transition-opacity hover:opacity-90"
+            className="group flex items-center gap-2 transition-opacity hover:opacity-90 cursor-pointer"
           >
             <div className="transition-all duration-500 ease-out transform group-hover:scale-110 group-hover:-rotate-3 group-active:scale-90">
               <Image
@@ -150,7 +154,7 @@ export default function Header() {
                 active === item
                   ? "text-brand-blue"
                   : "text-zinc-500 hover:text-brand-blue"
-              }`}
+              } cursor-pointer`}
             >
               {item}
             </Link>
@@ -160,7 +164,7 @@ export default function Header() {
         {/* Mobile Menu Button */}
         <button
           onClick={toggleMenu}
-          className="lg:hidden p-2 text-zinc-600 hover:bg-zinc-100 rounded-lg transition-colors z-50 relative"
+          className="lg:hidden p-2 text-zinc-600 hover:bg-zinc-100 rounded-lg transition-colors z-50 relative cursor-pointer"
         >
           {isOpen ? (
             <svg
@@ -206,7 +210,7 @@ export default function Header() {
           {/* Close Button Inside Drawer */}
           <button
             onClick={() => setIsOpen(false)}
-            className="absolute top-6 right-6 p-2 text-zinc-400 hover:text-brand-text transition-colors"
+            className="absolute top-6 right-6 p-2 text-zinc-400 hover:text-brand-text transition-colors cursor-pointer"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -246,7 +250,7 @@ export default function Header() {
                   active === item
                     ? "text-brand-blue scale-110"
                     : "text-zinc-400 hover:text-brand-blue"
-                }`}
+                } cursor-pointer`}
               >
                 {item}
               </Link>

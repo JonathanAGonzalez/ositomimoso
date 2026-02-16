@@ -118,7 +118,7 @@ export default function Testimonials() {
               educativo. <br />
               ¡Te esperamos con los brazos abiertos!
             </p>
-            <button className="px-10 py-4 bg-white text-brand-blue hover:bg-zinc-50 rounded-full font-bold shadow-xl shadow-black/10 transition-all transform hover:-translate-y-1 hover:scale-105 active:scale-95">
+            <button className="px-10 py-4 bg-white text-brand-blue hover:bg-zinc-50 rounded-full font-bold shadow-xl shadow-black/10 transition-all transform hover:-translate-y-1 hover:scale-105 active:scale-95 cursor-pointer">
               Agenda tu Visita
             </button>
           </div>

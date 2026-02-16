@@ -1,6 +1,8 @@
 "use client";
 
 import React from "react";
+import logo from "@/src/assets/logo.png";
+import Image from "next/image";
 
 export default function Footer() {
   const socialIcons = [
@@ -10,14 +12,26 @@ export default function Footer() {
   ];
 
   const contactList = [
-    { icon: "📞", text: "+34 123 456 789" },
-    { icon: "✉️", text: "info@ositomimoso.com" },
-    { icon: "📍", text: "Calle Principal 123, Madrid" },
+    {
+      icon: "📞",
+      text: "+54 11 4872-5474",
+      href: "tel:+541148725474",
+    },
+    {
+      icon: "✉️",
+      text: "info@ositomimoso.com.ar",
+      href: "mailto:info@ositomimoso.com.ar",
+    },
+    {
+      icon: "📍",
+      text: "Aguero 508, CABA, Argentina",
+      href: "https://maps.google.com/?q=Aguero+508,+CABA,+Argentina",
+    },
   ];
 
   const scheduleList = [
     { day: "Lunes - Viernes", time: "7:30 - 18:00" },
-    { day: "Sábado", time: "9:00 - 14:00" },
+    { day: "Sábado", time: "Cerrado" },
     { day: "Domingo", time: "Cerrado" },
   ];
 
@@ -31,21 +45,21 @@ export default function Footer() {
           {/* Logo & About */}
           <div className="flex flex-col items-start">
             <div className="flex items-center gap-2 mb-6">
-              <div className="w-10 h-10 bg-brand-blue/10 rounded-lg flex items-center justify-center overflow-hidden text-xl shadow-sm border border-brand-blue/20">
-                <span>🐻</span>
+              <div>
+                <Image src={logo.src} alt="Logo" width={48} height={48} />
               </div>
-              <span className="font-bold text-brand-text text-xl tracking-tight">
+              <span className="font-bold text-brand-text text-2xl tracking-tight font-script">
                 osito mimoso
               </span>
             </div>
-            <p className="text-zinc-400 text-sm leading-relaxed mb-8 max-w-xs">
+            <p className="text-zinc-500 text-base leading-relaxed mb-8 max-w-xs">
               Un espacio donde los niños crecen felices, seguros y amados.
             </p>
             <div className="flex gap-3">
               {socialIcons.map((social, idx) => (
                 <button
                   key={idx}
-                  className="w-10 h-10 bg-white shadow-md border border-zinc-50 rounded-full flex items-center justify-center text-lg hover:scale-110 hover:shadow-lg transition-all duration-300"
+                  className="w-11 h-11 bg-white shadow-md border border-zinc-50 rounded-full flex items-center justify-center text-xl hover:scale-110 hover:shadow-lg transition-all duration-300 cursor-pointer"
                 >
                   {social.icon}
                 </button>
@@ -55,16 +69,27 @@ export default function Footer() {
 
           {/* Contact Details */}
           <div>
-            <h4 className="font-bold text-brand-text mb-8 text-lg">Contacto</h4>
+            <h4 className="font-bold text-brand-text mb-8 text-xl">Contacto</h4>
             <ul className="space-y-6">
               {contactList.map((item, idx) => (
-                <li key={idx} className="flex items-center gap-4 group">
-                  <div className="w-8 h-8 bg-brand-blue/5 rounded-lg flex items-center justify-center text-sm group-hover:bg-brand-blue/10 transition-colors">
-                    {item.icon}
-                  </div>
-                  <span className="text-zinc-500 text-sm group-hover:text-brand-blue transition-colors cursor-default">
-                    {item.text}
-                  </span>
+                <li key={idx}>
+                  <a
+                    href={item.href}
+                    target={item.href.startsWith("http") ? "_blank" : undefined}
+                    rel={
+                      item.href.startsWith("http")
+                        ? "noopener noreferrer"
+                        : undefined
+                    }
+                    className="flex items-center gap-4 group cursor-pointer"
+                  >
+                    <div className="w-10 h-10 bg-brand-blue/5 rounded-xl flex items-center justify-center text-base group-hover:bg-brand-blue/10 transition-colors">
+                      {item.icon}
+                    </div>
+                    <span className="text-zinc-600 text-base group-hover:text-brand-blue transition-colors">
+                      {item.text}
+                    </span>
+                  </a>
                 </li>
               ))}
             </ul>
@@ -72,18 +97,20 @@ export default function Footer() {
 
           {/* Schedule */}
           <div>
-            <h4 className="font-bold text-brand-text mb-8 text-lg">Horario</h4>
+            <h4 className="font-bold text-brand-text mb-8 text-xl">Horario</h4>
             <ul className="space-y-6">
               {scheduleList.map((item, idx) => (
                 <li key={idx} className="flex items-center gap-4">
-                  <div className="w-8 h-8 bg-brand-gold/5 rounded-lg flex items-center justify-center text-sm">
-                    {idx === 2 ? "🌙" : "☀️"}
+                  <div className="w-10 h-10 bg-brand-gold/5 rounded-xl flex items-center justify-center text-sm">
+                    {idx >= 1 ? "🌙" : "☀️"}
                   </div>
                   <div>
-                    <p className="text-brand-text font-bold text-xs mb-0.5">
+                    <p className="text-brand-text font-bold text-sm mb-0.5">
                       {item.day}
                     </p>
-                    <p className="text-zinc-400 text-[10px]">{item.time}</p>
+                    <p className="text-zinc-500 text-xs font-medium">
+                      {item.time}
+                    </p>
                   </div>
                 </li>
               ))}
@@ -92,8 +119,8 @@ export default function Footer() {
         </div>
 
         {/* Copyright */}
-        <div className="border-t border-zinc-50 pt-10 flex flex-col md:flex-row justify-center items-center gap-4 text-center">
-          <p className="text-zinc-300 text-[10px] font-medium tracking-wider">
+        <div className="border-t border-zinc-100 pt-10 flex flex-col md:flex-row justify-center items-center gap-4 text-center">
+          <p className="text-zinc-400 text-xs font-semibold tracking-wide">
             © {new Date().getFullYear()} Osito Mimoso. Todos los derechos
             reservados. Hecho con <span className="text-brand-pink">❤️</span>{" "}
             para las familias.

@@ -1,13 +1,14 @@
 "use client";
 
-import React from "react";
+import whatsapp from "@/src/assets/whatsapp.png";
+import Image from "next/image";
 
 export default function Contact() {
   const contactInfo = [
     {
       title: "Teléfono",
       desc: "Llámanos de Lunes a Viernes",
-      value: "+34 123 456 789",
+      value: "+54 11 4872-5474",
       icon: "📞",
       color: "bg-brand-pink/10",
     },
@@ -20,8 +21,8 @@ export default function Contact() {
     },
     {
       title: "Ubicación",
-      desc: "Calle Principal 123",
-      value: "28001 Madrid, España",
+      desc: "Aguero 508",
+      value: "CABA, Argentina",
       icon: "📍",
       color: "bg-brand-brown/10",
     },
@@ -107,13 +108,18 @@ export default function Contact() {
 
               <div className="flex flex-col sm:flex-row items-center gap-6 mb-12">
                 {/* WhatsApp CTA - Adjusted Size */}
-                <button className="flex items-center gap-2 px-8 py-3.5 bg-[#25D366] text-white rounded-full font-bold shadow-lg shadow-green-200/50 hover:bg-[#20ba59] transition-all transform hover:-translate-y-1 hover:scale-105 active:scale-95 group/btn text-sm md:text-base">
-                  <span className="text-xl animate-bounce-slow">💬</span>
-                  Agendar por WhatsApp
+                <button className="flex items-center gap-2 px-8 py-3.5 bg-[#25D366] text-white rounded-full font-bold shadow-lg shadow-green-200/50 hover:bg-[#20ba59] transition-all transform hover:-translate-y-1 hover:scale-105 active:scale-95 group/btn text-sm md:text-base cursor-pointer">
+                  <Image
+                    src={whatsapp.src}
+                    alt="WhatsApp"
+                    width={20}
+                    height={20}
+                  />
+                  Agendar por WhatsApp{" "}
                 </button>
 
                 {/* Secondary Info */}
-                <div className="flex items-center gap-4 px-8 py-4 bg-zinc-50 rounded-3xl border border-zinc-100 shadow-sm">
+                {/* <div className="flex items-center gap-4 px-8 py-4 bg-zinc-50 rounded-3xl border border-zinc-100 shadow-sm">
                   <div className="w-10 h-10 bg-brand-gold/20 rounded-xl flex items-center justify-center text-xl">
                     ✨
                   </div>
@@ -125,7 +131,7 @@ export default function Contact() {
                       Lun-Vie · 9:00 - 17:00
                     </p>
                   </div>
-                </div>
+                </div> */}
               </div>
 
               <div className="p-1 px-4 rounded-full bg-brand-blue/5 border border-brand-blue/10">
