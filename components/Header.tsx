@@ -10,15 +10,17 @@ export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
   const [pillStyles, setPillStyles] = useState({ left: 0, width: 0 });
   const navRef = useRef<HTMLElement>(null);
+  const isManualScroll = useRef(false);
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const menuItems = [
     "Inicio",
     "Nosotros",
     "Programas",
     "Instalaciones",
-    "Galería",
     "Equipo",
     "Testimonios",
+    "Galería",
     "Contacto",
   ];
 
@@ -27,6 +29,16 @@ export default function Header() {
       .toLowerCase()
       .normalize("NFD")
       .replace(/[\u0300-\u036f]/g, "");
+
+  const handleSetActive = (item: string) => {
+    setActive(item);
+    // Disable intersection observer while we scroll to the clicked section
+    isManualScroll.current = true;
+    if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    timeoutRef.current = setTimeout(() => {
+      isManualScroll.current = false;
+    }, 1000);
+  };
 
   // Scroll Spy Logic
   useEffect(() => {
@@ -39,6 +51,9 @@ export default function Header() {
     };
 
     const observerCallback = (entries: IntersectionObserverEntry[]) => {
+      // Don't update from scroll if we are manually navigating
+      if (isManualScroll.current) return;
+
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
           const id = entry.target.id;
@@ -58,7 +73,10 @@ export default function Header() {
       if (element) observer.observe(element);
     });
 
-    return () => observer.disconnect();
+    return () => {
+      observer.disconnect();
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -92,7 +110,7 @@ export default function Header() {
         <div className="flex items-center gap-2">
           <Link
             href="#inicio"
-            onClick={() => setActive("Inicio")}
+            onClick={() => handleSetActive("Inicio")}
             className="group flex items-center gap-2 transition-opacity hover:opacity-90"
           >
             <div className="transition-all duration-500 ease-out transform group-hover:scale-110 group-hover:-rotate-3 group-active:scale-90">
@@ -126,7 +144,7 @@ export default function Header() {
             <Link
               key={item}
               href={`#${normalizeId(item)}`}
-              onClick={() => setActive(item)}
+              onClick={() => handleSetActive(item)}
               data-active={active === item}
               className={`relative z-10 px-4 py-2 rounded-full text-sm font-bold transition-colors duration-300 ${
                 active === item
@@ -221,7 +239,7 @@ export default function Header() {
                 key={item}
                 href={`#${normalizeId(item)}`}
                 onClick={() => {
-                  setActive(item);
+                  handleSetActive(item);
                   setIsOpen(false);
                 }}
                 className={`text-2xl font-extrabold transition-all duration-300 py-2 ${
