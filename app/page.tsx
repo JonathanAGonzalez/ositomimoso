@@ -6,6 +6,7 @@ import Programs from "@/components/Programs";
 import Facilities from "@/components/Facilities";
 import Team from "@/components/Team";
 import Testimonials from "@/components/Testimonials";
+import Gallery from "@/components/Gallery";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
 import FloatingElements from "@/components/FloatingElements";
@@ -23,6 +24,7 @@ export default function Home() {
         <Facilities />
         <Team />
         <Testimonials />
+        <Gallery />
         <Contact />
       </main>
       <Footer />

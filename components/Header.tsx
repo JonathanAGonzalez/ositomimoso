@@ -12,14 +12,21 @@ export default function Header() {
     "Nosotros",
     "Programas",
     "Instalaciones",
+    "Galería",
     "Equipo",
     "Testimonios",
     "Contacto",
   ];
 
+  const normalizeId = (text: string) =>
+    text
+      .toLowerCase()
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "");
+
   // Scroll Spy Logic
   useEffect(() => {
-    const sectionIds = menuItems.map((item) => item.toLowerCase());
+    const sectionIds = menuItems.map((item) => normalizeId(item));
 
     const observerOptions = {
       root: null,
@@ -31,7 +38,7 @@ export default function Header() {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
           const id = entry.target.id;
-          const label = menuItems.find((item) => item.toLowerCase() === id);
+          const label = menuItems.find((item) => normalizeId(item) === id);
           if (label) setActive(label);
         }
       });
@@ -76,7 +83,7 @@ export default function Header() {
           {menuItems.map((item) => (
             <Link
               key={item}
-              href={`#${item.toLowerCase()}`}
+              href={`#${normalizeId(item)}`}
               onClick={() => setActive(item)}
               className={`px-4 py-2 rounded-full text-sm font-bold transition-all duration-300 ${
                 active === item
@@ -132,7 +139,7 @@ export default function Header() {
 
       {/* Mobile Menu Drawer - Outside header, Fixed position */}
       <div
-        className={`fixed inset-0 bg-white z-[60] lg:hidden transition-all duration-500 ease-in-out transform flex flex-col ${isOpen ? "translate-y-0 opacity-100" : "-translate-y-full opacity-0"}`}
+        className={`fixed inset-0 bg-white z-60 lg:hidden transition-all duration-500 ease-in-out transform flex flex-col ${isOpen ? "translate-y-0 opacity-100" : "-translate-y-full opacity-0"}`}
       >
         <div className="flex flex-col items-center justify-center grow gap-8 p-10 overflow-y-auto">
           {/* Close Button Inside Drawer */}
@@ -163,7 +170,7 @@ export default function Header() {
             {menuItems.map((item) => (
               <Link
                 key={item}
-                href={`#${item.toLowerCase()}`}
+                href={`#${normalizeId(item)}`}
                 onClick={() => {
                   setActive(item);
                   setIsOpen(false);
