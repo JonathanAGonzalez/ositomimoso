@@ -104,7 +104,7 @@ export default function Gallery() {
         </div>
 
         {/* Bento Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 auto-rows-[240px]">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 auto-rows-[240px] grid-flow-dense">
           {filteredPhotos.map((photo) => (
             <div
               key={photo.id}

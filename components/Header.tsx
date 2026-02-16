@@ -1,7 +1,9 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useState, useEffect } from "react";
+import logo from "@/src/assets/logo.png";
 
 export default function Header() {
   const [active, setActive] = useState("Inicio");
@@ -67,14 +69,18 @@ export default function Header() {
           <Link
             href="#inicio"
             onClick={() => setActive("Inicio")}
-            className="flex items-center gap-2"
+            className="group flex items-center gap-2 transition-opacity hover:opacity-90"
           >
-            <div className="w-10 h-10 bg-brand-blue/10 rounded-lg flex items-center justify-center text-xl shadow-sm border border-brand-blue/20">
-              <span>🐻</span>
+            <div className="transition-all duration-500 ease-out transform group-hover:scale-110 group-hover:-rotate-3 group-active:scale-90">
+              <Image
+                src={logo.src}
+                width={120}
+                height={60}
+                alt="Osito Mimoso Logo"
+                className="w-auto h-12 md:h-14 object-contain"
+                priority
+              />
             </div>
-            <span className="font-bold text-brand-text text-xl tracking-tight">
-              osito mimoso
-            </span>
           </Link>
         </div>
 
@@ -163,8 +169,14 @@ export default function Header() {
             </svg>
           </button>
 
-          <div className="w-20 h-20 bg-brand-blue/10 rounded-2xl flex items-center justify-center text-5xl mb-4 shadow-inner">
-            <span>🐻</span>
+          <div className="mb-4 animate-bounce-slow">
+            <Image
+              src={logo.src}
+              width={100}
+              height={100}
+              alt="Logo"
+              className="w-auto h-20 object-contain"
+            />
           </div>
           <nav className="flex flex-col items-center gap-6 w-full">
             {menuItems.map((item) => (
