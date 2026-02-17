@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Nunito, Caveat } from "next/font/google";
+import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 
 const nunito = Nunito({
@@ -92,6 +93,7 @@ export default function RootLayout({
         className={`${nunito.variable} ${caveat.variable} font-sans antialiased`}
       >
         {children}
+        <Analytics />
       </body>
     </html>
   );
