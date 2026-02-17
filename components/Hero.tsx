@@ -41,13 +41,14 @@ export default function Hero() {
         </h1>
 
         <p className="text-zinc-500 text-lg md:text-xl max-w-2xl mb-10 leading-relaxed">
-          Descubre miles de actividades divertidas e interactivas para apoyar el
-          crecimiento y el proceso de aprendizaje de tu hijo
+          Acompañamos sus primeros años con amor, estimulación y actividades
+          pensadas para potenciar su desarrollo integral en un entorno seguro y
+          cercano.
         </p>
 
         <div className="flex flex-col sm:flex-row gap-4 mb-20">
           <button className="px-8 py-4 bg-brand-blue hover:bg-brand-blue/90 text-white rounded-full font-bold shadow-lg shadow-brand-blue/25 transition-all flex items-center gap-2 group transform hover:-translate-y-1 cursor-pointer">
-            Comenzar
+            Quiero conocer la escuela
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="20"
@@ -64,7 +65,7 @@ export default function Hero() {
             </svg>
           </button>
           <button className="px-8 py-4 bg-white hover:bg-zinc-50 text-zinc-600 border border-zinc-100 rounded-full font-bold shadow-sm transition-all transform hover:-translate-y-1 cursor-pointer">
-            Conoce Más
+            Agendar una visita
           </button>
         </div>
 
@@ -73,7 +74,7 @@ export default function Hero() {
           <div className="bg-white p-8 rounded-3xl shadow-xl shadow-zinc-200/50 flex flex-col items-center transform transition-all duration-300 hover:scale-105">
             <div className="mb-4 text-3xl">🎓</div>
             <h3 className="text-4xl font-extrabold text-brand-blue mb-1">
-              15+
+              35+
             </h3>
             <p className="text-zinc-400 font-medium whitespace-nowrap">
               Años de Experiencia
@@ -83,7 +84,7 @@ export default function Hero() {
           <div className="bg-white p-8 rounded-3xl shadow-xl shadow-zinc-200/50 flex flex-col items-center transform transition-all duration-300 hover:scale-105 border-b-4 border-brand-pink">
             <div className="mb-4 text-3xl">❤️</div>
             <h3 className="text-4xl font-extrabold text-brand-pink mb-1">
-              200+
+              800+
             </h3>
             <p className="text-zinc-400 font-medium whitespace-nowrap">
               Familias Felices

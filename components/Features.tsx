@@ -3,9 +3,9 @@
 export default function Features() {
   const features = [
     {
-      title: "Amor y Cariño",
+      title: "Amor y Contención",
       description:
-        "Cada niño es tratado con el amor y cuidado que merece, creando vínculos afectivos sólidos.",
+        "Cada niño es acompañado con afecto genuino y respeto por su individualidad, construyendo vínculos seguros que fortalecen su confianza desde los primeros años.",
       icon: "❤️",
       color: "bg-brand-pink/10",
       textColor: "text-brand-pink",
@@ -13,23 +13,23 @@ export default function Features() {
     {
       title: "Desarrollo Integral",
       description:
-        "Programas diseñados para estimular el desarrollo cognitivo, emocional y social de cada pequeño.",
-      icon: "🎯",
+        "Estimulación cognitiva, emocional y social a través del juego, la exploración y propuestas pensadas para cada etapa del crecimiento.",
+      icon: "🧠",
       color: "bg-brand-blue/10",
       textColor: "text-brand-blue",
     },
     {
-      title: "Trabajo en Equipo",
+      title: "Trabajo en Equipo con las Familias",
       description:
-        "Colaboración estrecha con las familias para el bienestar y crecimiento de los niños.",
-      icon: "👥",
+        "Creemos en una comunicación cercana y constante, acompañando a cada familia en el proceso de aprendizaje y desarrollo de su hijo.",
+      icon: "🤝",
       color: "bg-brand-brown/10",
       textColor: "text-brand-brown",
     },
     {
-      title: "Seguridad",
+      title: "Seguridad y Bienestar",
       description:
-        "Instalaciones seguras, higiénicas y adaptadas específicamente para la primera infancia.",
+        "Espacios diseñados para la primera infancia, con ambientes seguros, higiénicos y preparados para brindar tranquilidad todos los días.",
       icon: "🛡️",
       color: "bg-brand-gold/15",
       textColor: "text-brand-gold",

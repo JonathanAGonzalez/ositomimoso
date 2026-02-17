@@ -2,9 +2,10 @@
 
 export default function Philosophy() {
   const tags = [
-    "Metodología Montessori",
-    "Educación Bilingüe",
-    "Atención Personalizada",
+    "❤️ Ambiente cálido y familiar",
+    "🛡️ Espacio seguro y cuidado",
+    "🤝 Acompañamiento cercano",
+    "🌈 Desarrollo emocional",
   ];
 
   return (
@@ -58,26 +59,23 @@ export default function Philosophy() {
           {/* Left Column: Text */}
           <div className="order-2 lg:order-1">
             <h3 className="text-3xl md:text-4xl font-extrabold text-brand-text mb-8 leading-tight">
-              Ayudamos a los niños a{" "}
+              Acompañamos a tu hijo a{" "}
               <span className="font-script italic text-brand-blue font-normal text-4xl md:text-5xl">
-                descubrir la alegría
+                crecer con alegría y creatividad
               </span>{" "}
-              del aprendizaje creativo
             </h3>
 
             <div className="space-y-6 text-zinc-500 text-lg leading-relaxed mb-10">
               <p>
-                Desde hace más de 15 años, hemos acompañado a cientos de
-                familias en la hermosa etapa de la primera infancia. Nuestro
-                equipo de profesionales cualificados trabaja con pasión y
-                dedicación para crear experiencias de aprendizaje
-                significativas.
-              </p>
-              <p>
-                Entendemos la importancia de los primeros años en el desarrollo
-                de los niños, por eso combinamos metodologías pedagógicas
-                innovadoras con el calor humano que cada pequeño necesita para
-                sentirse seguro y feliz.
+                Durante más de <span className="font-bold"> 35 años</span> hemos
+                estado junto a familias como la tuya, acompañando la etapa más
+                preciosa: la primera infancia. Nuestro equipo de profesionales
+                apasionados y calificados crea experiencias de aprendizaje que
+                inspiran curiosidad, confianza y felicidad en cada niño.
+                Entendemos lo importante que son los primeros años para el
+                desarrollo integral. Por eso combinamos metodologías pedagógicas
+                innovadoras con un ambiente cálido y afectuoso donde cada
+                pequeño se siente seguro, querido y motivado a explorar.
               </p>
             </div>
 

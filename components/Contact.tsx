@@ -109,7 +109,12 @@ export default function Contact() {
 
               <div className="flex flex-col sm:flex-row items-center gap-4 mb-12">
                 {/* WhatsApp CTA */}
-                <button className="flex items-center gap-3 px-8 py-3.5 bg-[#25D366] text-white rounded-full font-bold shadow-lg shadow-green-200/50 hover:bg-[#20ba59] transition-all transform hover:-translate-y-1 hover:scale-105 active:scale-95 group/btn text-sm md:text-base cursor-pointer">
+                <Link
+                  href="https://wa.me/5491148725474?text=¡Hola!%20Me%20gustaría%20agendar%20una%20visita%20para%20conocer%20el%20jardín."
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-3 px-8 py-3.5 bg-[#25D366] text-white rounded-full font-bold shadow-lg shadow-green-200/50 hover:bg-[#20ba59] transition-all transform hover:-translate-y-1 hover:scale-105 active:scale-95 group/btn text-sm md:text-base cursor-pointer"
+                >
                   <Image
                     src={whatsapp.src}
                     alt="WhatsApp"
@@ -117,7 +122,7 @@ export default function Contact() {
                     height={20}
                   />
                   Agenda tu visita presencial
-                </button>
+                </Link>
 
                 {/* Calendly CTA */}
                 {/* Calendly CTA */}
