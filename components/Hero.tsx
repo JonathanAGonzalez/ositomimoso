@@ -1,7 +1,24 @@
 "use client";
-import { track } from "@vercel/analytics/react";
+
+import posthog from "posthog-js";
 
 export default function Hero() {
+  const handleCtaClick = () => {
+    posthog.capture("hero_cta_click", {
+      button_text: "Quiero conocer la escuela",
+    });
+    // Scroll to contact section
+    document.getElementById("contacto")?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  const handleScheduleVisitClick = () => {
+    posthog.capture("hero_schedule_visit_click", {
+      button_text: "Agendar una visita",
+    });
+    // Scroll to contact section
+    document.getElementById("contacto")?.scrollIntoView({ behavior: "smooth" });
+  };
+
   return (
     <section
       id="inicio"
@@ -49,9 +66,7 @@ export default function Hero() {
 
         <div className="flex flex-col sm:flex-row gap-4 mb-20">
           <button
-            onClick={() => {
-              track("Click en herobanner btn - Quiero Conocer");
-            }}
+            onClick={handleCtaClick}
             className="px-8 py-4 bg-brand-blue hover:bg-brand-blue/90 text-white rounded-full font-bold shadow-lg shadow-brand-blue/25 transition-all flex items-center gap-2 group transform hover:-translate-y-1 cursor-pointer"
           >
             Quiero conocer la escuela
@@ -71,9 +86,7 @@ export default function Hero() {
             </svg>
           </button>
           <button
-            onClick={() => {
-              track("Hero - Agendar Visita");
-            }}
+            onClick={handleScheduleVisitClick}
             className="px-8 py-4 bg-white hover:bg-zinc-50 text-zinc-600 border border-zinc-100 rounded-full font-bold shadow-sm transition-all transform hover:-translate-y-1 cursor-pointer"
           >
             Agendar una visita

@@ -1,9 +1,17 @@
 "use client";
 
 import React, { useState } from "react";
+import posthog from "posthog-js";
 
 export default function Gallery() {
   const [activeFilter, setActiveFilter] = useState("Todas");
+
+  const handleFilterChange = (category: string) => {
+    setActiveFilter(category);
+    posthog.capture("gallery_filter_changed", {
+      filter_category: category,
+    });
+  };
 
   const categories = ["Todas", "Espacios", "Actividades", "Aire Libre"];
 
@@ -91,7 +99,7 @@ export default function Gallery() {
           {categories.map((cat) => (
             <button
               key={cat}
-              onClick={() => setActiveFilter(cat)}
+              onClick={() => handleFilterChange(cat)}
               className={`px-8 py-3 rounded-full text-sm font-bold transition-all duration-300 ${
                 activeFilter === cat
                   ? "bg-brand-blue text-white shadow-xl shadow-brand-blue/20"

@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState, useEffect, useRef } from "react";
 import logo from "@/src/assets/logo.png";
+import posthog from "posthog-js";
 
 export default function Header() {
   const [active, setActive] = useState("Inicio");
@@ -33,6 +34,9 @@ export default function Header() {
 
   const handleSetActive = (item: string) => {
     setActive(item);
+    posthog.capture("navigation_click", {
+      section: item,
+    });
     // Disable intersection observer while we scroll to the clicked section
     isManualScroll.current = true;
     if (timeoutRef.current) clearTimeout(timeoutRef.current);
@@ -117,7 +121,12 @@ export default function Header() {
     return () => window.removeEventListener("resize", updatePill);
   }, [active]);
 
-  const toggleMenu = () => setIsOpen(!isOpen);
+  const toggleMenu = () => {
+    if (!isOpen) {
+      posthog.capture("mobile_menu_opened");
+    }
+    setIsOpen(!isOpen);
+  };
 
   return (
     <>

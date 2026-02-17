@@ -3,9 +3,20 @@
 import whatsapp from "@/src/assets/whatsapp.png";
 import Image from "next/image";
 import Link from "next/link";
-import { track } from "@vercel/analytics/react";
+import posthog from "posthog-js";
 
 export default function Contact() {
+  const handleWhatsAppClick = () => {
+    posthog.capture("schedule_visit_whatsapp_click", {
+      location: "contact_section",
+    });
+  };
+
+  const handleVirtualMeetingClick = () => {
+    posthog.capture("virtual_meeting_click", {
+      location: "contact_section",
+    });
+  };
   const contactInfo = [
     {
       title: "Teléfono",
@@ -114,7 +125,7 @@ export default function Contact() {
                   href="https://wa.me/5491148725474?text=¡Hola!%20Me%20gustaría%20agendar%20una%20visita%20para%20conocer%20el%20jardín."
                   target="_blank"
                   rel="noopener noreferrer"
-                  onClick={() => track("Contact - Presencial WhatsApp")}
+                  onClick={handleWhatsAppClick}
                   className="flex items-center gap-3 px-8 py-3.5 bg-[#25D366] text-white rounded-full font-bold shadow-lg shadow-green-200/50 hover:bg-[#20ba59] transition-all transform hover:-translate-y-1 hover:scale-105 active:scale-95 group/btn text-sm md:text-base cursor-pointer"
                 >
                   <Image
@@ -127,12 +138,9 @@ export default function Contact() {
                 </Link>
 
                 {/* Calendly CTA */}
-                {/* Calendly CTA */}
                 <Link
                   href="/agendar-visita"
-                  onClick={() =>
-                    track("Click en agendar visita a la page de calendly")
-                  }
+                  onClick={handleVirtualMeetingClick}
                   className="flex items-center gap-3 px-8 py-3.5 bg-brand-blue text-white rounded-full font-bold shadow-lg shadow-brand-blue/20 hover:bg-brand-blue/90 transition-all transform hover:-translate-y-1 hover:scale-105 active:scale-95 text-sm md:text-base cursor-pointer"
                 >
                   <svg

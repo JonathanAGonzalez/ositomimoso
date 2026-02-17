@@ -3,8 +3,14 @@
 import React from "react";
 import logo from "@/src/assets/logo.png";
 import Image from "next/image";
+import posthog from "posthog-js";
 
 export default function Footer() {
+  const handleContactClick = (contactType: string) => {
+    posthog.capture("footer_contact_click", {
+      contact_type: contactType,
+    });
+  };
   const socialIcons = [
     { icon: "☀️", color: "text-brand-gold" },
     { icon: "❤️", color: "text-brand-pink" },
@@ -16,16 +22,19 @@ export default function Footer() {
       icon: "📞",
       text: "+54 11 4872-5474",
       href: "tel:+541148725474",
+      type: "phone",
     },
     {
       icon: "✉️",
       text: "info@ositomimoso.com.ar",
       href: "mailto:info@ositomimoso.com.ar",
+      type: "email",
     },
     {
       icon: "📍",
       text: "Aguero 508, CABA, Argentina",
       href: "https://maps.google.com/?q=Aguero+508,+CABA,+Argentina",
+      type: "location",
     },
   ];
 
@@ -81,6 +90,7 @@ export default function Footer() {
                         ? "noopener noreferrer"
                         : undefined
                     }
+                    onClick={() => handleContactClick(item.type)}
                     className="flex items-center gap-4 group cursor-pointer"
                   >
                     <div className="w-10 h-10 bg-brand-blue/5 rounded-xl flex items-center justify-center text-base group-hover:bg-brand-blue/10 transition-colors">

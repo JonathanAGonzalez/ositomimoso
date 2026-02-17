@@ -2,8 +2,7 @@
 
 import Image from "next/image";
 import whatsappIcon from "@/src/assets/whatsapp.png";
-
-import { track } from "@vercel/analytics/react";
+import posthog from "posthog-js";
 
 export default function WhatsAppButton() {
   const phoneNumber = "541148725474";
@@ -12,12 +11,19 @@ export default function WhatsAppButton() {
 
   const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
 
+  const handleClick = () => {
+    posthog.capture("whatsapp_click", {
+      location: "floating_button",
+      phone_number: phoneNumber,
+    });
+  };
+
   return (
     <a
       href={whatsappUrl}
       target="_blank"
-      onClick={() => track("Click en boton flotante de whatsapp")}
       rel="noopener noreferrer"
+      onClick={handleClick}
       className="fixed bottom-8 right-8 z-50 group flex items-center gap-3"
       aria-label="Contactar por WhatsApp"
     >

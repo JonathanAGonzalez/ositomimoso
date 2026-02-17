@@ -3,8 +3,14 @@
 import Image from "next/image";
 import Link from "next/link";
 import logo from "@/src/assets/logo.png";
+import posthog from "posthog-js";
+import { useEffect } from "react";
 
 export default function AgendarVisita() {
+  useEffect(() => {
+    posthog.capture("schedule_visit_page_viewed");
+  }, []);
+
   return (
     <div className="min-h-screen bg-[#fafafa] flex flex-col">
       {/* Minimal Header */}
