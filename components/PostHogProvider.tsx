@@ -20,6 +20,15 @@ export default function PostHogProvider({
         person_profiles: "identified_only",
         capture_pageview: false, // Disable automatic pageview capture, as we capture manually
         capture_pageleave: true, // Enable pageleave capture
+        sanitize_properties: (properties) => {
+          if (typeof properties["$current_url"] === "string") {
+            properties["$current_url"] = properties["$current_url"].replace(
+              /\/home\/?$/,
+              "",
+            );
+          }
+          return properties;
+        },
         loaded: (posthog) => {
           if (process.env.NODE_ENV === "development") posthog.debug();
         },
