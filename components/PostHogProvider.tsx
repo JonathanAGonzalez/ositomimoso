@@ -23,6 +23,15 @@ export default function PostHogProvider({
         loaded: (posthog) => {
           if (process.env.NODE_ENV === "development") posthog.debug();
         },
+        before_send: (event) => {
+          if (event?.properties?.$current_url) {
+            const parsed = new URL(event.properties.$current_url);
+            if (parsed.hash) {
+              event.properties.$pathname = parsed.pathname + parsed.hash;
+            }
+          }
+          return event;
+        },
       });
     }
   }, [apiKey, apiHost]);
