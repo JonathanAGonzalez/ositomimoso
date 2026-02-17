@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { track } from "@vercel/analytics/react";
 
 export default function Testimonials() {
   const testimonials = [
@@ -123,6 +124,9 @@ export default function Testimonials() {
             <Link
               href="https://wa.me/5491148725474?text=¡Hola!%20Me%20gustaría%20agendar%20una%20visita%20para%20conocer%20el%20jardín."
               target="_blank"
+              onClick={() =>
+                track("Click en banner testimonial Agenda Visita WhatsApp")
+              }
               rel="noopener noreferrer"
               className="inline-block px-10 py-4 bg-white text-brand-blue hover:bg-zinc-50 rounded-full font-bold shadow-xl shadow-black/10 transition-all transform hover:-translate-y-1 hover:scale-105 active:scale-95 cursor-pointer"
             >

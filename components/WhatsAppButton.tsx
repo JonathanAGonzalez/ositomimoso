@@ -3,6 +3,8 @@
 import Image from "next/image";
 import whatsappIcon from "@/src/assets/whatsapp.png";
 
+import { track } from "@vercel/analytics/react";
+
 export default function WhatsAppButton() {
   const phoneNumber = "541148725474";
   const message =
@@ -14,6 +16,7 @@ export default function WhatsAppButton() {
     <a
       href={whatsappUrl}
       target="_blank"
+      onClick={() => track("Click en boton flotante de whatsapp")}
       rel="noopener noreferrer"
       className="fixed bottom-8 right-8 z-50 group flex items-center gap-3"
       aria-label="Contactar por WhatsApp"
