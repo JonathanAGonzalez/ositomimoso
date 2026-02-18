@@ -1,12 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { GoogleGenerativeAI } from "@google/generative-ai";
-
-// 🗂️ Historial de conversación por usuario (en memoria)
-const conversationHistory = new Map<
-  string,
-  Array<{ role: "user" | "model"; parts: [{ text: string }] }>
->();
-const MAX_HISTORY = 20;
+import { connectDB } from "@/lib/mongodb";
+import Conversation from "@/lib/models/Conversation";
+import Message from "@/lib/models/Message";
 
 const SYSTEM_INSTRUCTION = `Sos "Osi", parte del equipo de la Escuela Infantil "Osito Mimoso". Respondés consultas de familias por WhatsApp de forma cálida, humana y directa.
 
@@ -47,6 +43,8 @@ Opción 2 — **Visita presencial**: vienen a la escuela, recorren las salas y c
 - Si la familia expresa miedo o ansiedad, primero contenés emocionalmente antes de dar info
 - Si preguntan si sos un bot: "Soy parte del equipo que atiende las consultas 😊 Si necesitás hablar con alguien de la escuela directamente, también lo podemos coordinar."`;
 
+const MAX_HISTORY = 20;
+
 // 🌐 Webhook Verification (GET)
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
@@ -84,6 +82,7 @@ export async function POST(req: NextRequest) {
       if (message?.type === "text") {
         const from = message.from;
         const text = message.text.body;
+        const whatsappMessageId = message.id;
 
         console.log(
           `👤 Nombre del contacto (perfil WhatsApp): "${contactName}"`,
@@ -93,8 +92,67 @@ export async function POST(req: NextRequest) {
         );
 
         try {
+          // Conectar a MongoDB
+          await connectDB();
+
           // Marcar como leído (ticks azules)
-          await markAsRead(message.id);
+          await markAsRead(whatsappMessageId);
+
+          // Buscar o crear conversación en MongoDB
+          let conversation = await Conversation.findOne({ phoneNumber: from });
+          if (!conversation) {
+            conversation = await Conversation.create({
+              phoneNumber: from,
+              contactName: contactName || "",
+              botActive: true,
+              lastMessageAt: new Date(),
+            });
+            console.log(`📝 Nueva conversación creada para ${from}`);
+          } else {
+            // Actualizar nombre si cambió y fecha del último mensaje
+            await Conversation.updateOne(
+              { _id: conversation._id },
+              {
+                contactName: contactName || conversation.contactName,
+                lastMessageAt: new Date(),
+              },
+            );
+          }
+
+          // Guardar mensaje del usuario en MongoDB
+          await Message.create({
+            conversationId: conversation._id,
+            role: "user",
+            text,
+            whatsappMessageId,
+            timestamp: new Date(),
+          });
+
+          // Si el bot está desactivado, no responder con Gemini
+          if (!conversation.botActive) {
+            console.log(
+              `🔕 Bot desactivado para ${from}. Mensaje guardado sin respuesta automática.`,
+            );
+            return NextResponse.json({ status: "success" });
+          }
+
+          // Cargar historial desde MongoDB para Gemini
+          const recentMessages = await Message.find({
+            conversationId: conversation._id,
+          })
+            .sort({ timestamp: -1 })
+            .limit(MAX_HISTORY)
+            .lean();
+
+          // Convertir al formato que espera Gemini (orden cronológico, sin el último mensaje del usuario)
+          const history = recentMessages
+            .reverse()
+            .slice(0, -1) // excluir el último (el que acabamos de guardar)
+            .filter((m) => m.role === "user" || m.role === "bot")
+            .map((m) => ({
+              role: m.role === "user" ? ("user" as const) : ("model" as const),
+              parts: [{ text: m.text }],
+            }));
 
           console.log("🧠 Consultando a Gemini...");
           const apiKey = process.env.GEMINI_API_KEY?.trim();
@@ -103,12 +161,6 @@ export async function POST(req: NextRequest) {
           const genAI = new GoogleGenerativeAI(apiKey);
           const modelNames = ["gemini-2.0-flash", "gemini-2.0-flash-lite"];
           let aiResponse = "";
-
-          // Obtener o crear historial de conversación para este usuario
-          if (!conversationHistory.has(from)) {
-            conversationHistory.set(from, []);
-          }
-          const history = conversationHistory.get(from)!;
 
           for (const modelName of modelNames) {
             try {
@@ -121,19 +173,9 @@ export async function POST(req: NextRequest) {
                 systemInstruction: personalizedInstruction,
               });
 
-              // Iniciar chat con historial previo
               const chat = model.startChat({ history });
               const result = await chat.sendMessage(text);
               aiResponse = result.response.text();
-
-              // Guardar en historial
-              history.push({ role: "user", parts: [{ text }] });
-              history.push({ role: "model", parts: [{ text: aiResponse }] });
-
-              // Limitar tamaño del historial
-              if (history.length > MAX_HISTORY) {
-                history.splice(0, history.length - MAX_HISTORY);
-              }
 
               console.log(
                 `🤖 Gemini (${modelName}) respondió: "${aiResponse.substring(0, 50)}..."`,
@@ -148,16 +190,20 @@ export async function POST(req: NextRequest) {
 
           if (!aiResponse) throw new Error("Gemini no devolvió texto");
 
-          console.log(
-            `🤖 Gemini respondió: "${aiResponse.substring(0, 50)}..."`,
-          );
+          // Guardar respuesta del bot en MongoDB
+          await Message.create({
+            conversationId: conversation._id,
+            role: "bot",
+            text: aiResponse,
+            timestamp: new Date(),
+          });
 
           await sendWhatsAppMessage(from, aiResponse);
           console.log("✅ Proceso completado con éxito");
         } catch (aiError: unknown) {
           const msg =
             aiError instanceof Error ? aiError.message : String(aiError);
-          console.error("❌ Error con Gemini:", msg);
+          console.error("❌ Error procesando mensaje:", msg);
         }
       } else {
         console.log("⚠️ Tipo de mensaje no soportado:", message?.type);
@@ -197,7 +243,7 @@ async function markAsRead(messageId: string) {
 }
 
 // ✉️ Función auxiliar para enviar mensajes via WhatsApp Cloud API
-async function sendWhatsAppMessage(to: string, text: string) {
+export async function sendWhatsAppMessage(to: string, text: string) {
   const url = `https://graph.facebook.com/v22.0/${process.env.WHATSAPP_PHONE_NUMBER_ID}/messages`;
 
   const response = await fetch(url, {
