@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState, useRef, useCallback } from "react";
+import { signOut, useSession } from "next-auth/react";
 
 interface Conversation {
   _id: string;
@@ -18,6 +19,7 @@ interface Message {
 }
 
 export default function DashboardPage() {
+  const { data: session } = useSession();
   const [conversations, setConversations] = useState<Conversation[]>([]);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [messages, setMessages] = useState<Message[]>([]);
@@ -166,12 +168,17 @@ export default function DashboardPage() {
         }}
       >
         {/* Header */}
-        <div
-          style={{ padding: "20px 16px", borderBottom: "1px solid #1e1e2e" }}
-        >
-          <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+        <div style={{ padding: "16px", borderBottom: "1px solid #1e1e2e" }}>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "10px",
+              marginBottom: "12px",
+            }}
+          >
             <span style={{ fontSize: "24px" }}>🧸</span>
-            <div>
+            <div style={{ flex: 1 }}>
               <h1
                 style={{
                   margin: 0,
@@ -187,6 +194,52 @@ export default function DashboardPage() {
               </p>
             </div>
           </div>
+          {session?.user && (
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}
+            >
+              <span
+                style={{
+                  fontSize: "12px",
+                  color: "#6b6b8a",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  whiteSpace: "nowrap",
+                }}
+              >
+                👤 {session.user.name || session.user.email}
+              </span>
+              <button
+                onClick={() => signOut({ callbackUrl: "/login" })}
+                style={{
+                  padding: "4px 10px",
+                  borderRadius: "8px",
+                  border: "1px solid #2a2a3e",
+                  background: "transparent",
+                  color: "#6b6b8a",
+                  fontSize: "11px",
+                  cursor: "pointer",
+                  flexShrink: 0,
+                  marginLeft: "8px",
+                  transition: "all 0.2s",
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.color = "#f87171";
+                  e.currentTarget.style.borderColor = "rgba(220,38,38,0.4)";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.color = "#6b6b8a";
+                  e.currentTarget.style.borderColor = "#2a2a3e";
+                }}
+              >
+                Salir
+              </button>
+            </div>
+          )}
         </div>
 
         {/* Conversation list */}
