@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import posthog from "posthog-js";
 
 export default function Gallery() {
@@ -71,8 +71,26 @@ export default function Gallery() {
       ? photos
       : photos.filter((p) => p.category === activeFilter);
 
+  const sectionRef = useRef<HTMLElement>(null);
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.1 },
+    );
+    if (sectionRef.current) observer.observe(sectionRef.current);
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <section
+      ref={sectionRef}
       id="galeria"
       className="py-24 px-6 md:px-16 bg-white overflow-hidden"
     >
@@ -113,13 +131,19 @@ export default function Gallery() {
 
         {/* Bento Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 auto-rows-[240px] grid-flow-dense">
-          {filteredPhotos.map((photo) => (
+          {filteredPhotos.map((photo, idx) => (
             <div
               key={photo.id}
               className={`group relative rounded-[40px] overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-700 border-4 border-white transform hover:-translate-y-2
                 ${photo.size === "large" ? "md:col-span-2 md:row-span-2" : ""}
                 ${photo.size === "medium" ? "md:row-span-2" : ""}
+                ${
+                  isVisible
+                    ? "opacity-100 translate-y-0"
+                    : "opacity-0 translate-y-12"
+                }
               `}
+              style={{ transitionDelay: isVisible ? `${idx * 150}ms` : "0ms" }}
             >
               {/* Background with Gradient/Pattern */}
               <div

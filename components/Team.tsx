@@ -1,6 +1,7 @@
 "use client";
 
 import Image, { StaticImageData } from "next/image";
+import { useEffect, useRef, useState } from "react";
 
 // Import team images
 import eugeImg from "@/src/assets/team/euge.jpeg";
@@ -115,8 +116,29 @@ export default function Team() {
     },
   ];
 
+  const sectionRef = useRef<HTMLElement>(null);
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.1 },
+    );
+    if (sectionRef.current) observer.observe(sectionRef.current);
+    return () => observer.disconnect();
+  }, []);
+
   return (
-    <section id="equipo" className="py-24 px-6 md:px-16 bg-[#fafafa]">
+    <section
+      ref={sectionRef}
+      id="equipo"
+      className="py-24 px-6 md:px-16 bg-[#fafafa]"
+    >
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="text-center mb-20">
@@ -140,7 +162,12 @@ export default function Team() {
           {pillars.map((pillar, idx) => (
             <div
               key={idx}
-              className="bg-white p-10 rounded-[40px] shadow-xl shadow-zinc-200/50 border border-zinc-50 flex flex-col items-center text-center group hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-1"
+              className={`bg-white p-10 rounded-[40px] shadow-xl shadow-zinc-200/50 border border-zinc-50 flex flex-col items-center text-center group hover:shadow-2xl transition-all duration-700 transform hover:-translate-y-1 ${
+                isVisible
+                  ? "opacity-100 translate-y-0"
+                  : "opacity-0 translate-y-8"
+              }`}
+              style={{ transitionDelay: isVisible ? `${idx * 150}ms` : "0ms" }}
             >
               <div
                 className={`w-16 h-16 ${pillar.color} rounded-2xl flex items-center justify-center text-3xl mb-8 group-hover:scale-110 transition-transform duration-500 shadow-sm`}
@@ -160,7 +187,17 @@ export default function Team() {
         {/* Team Members by Group */}
         <div className="space-y-20">
           {teamGroups.map((group, gIdx) => (
-            <div key={gIdx}>
+            <div
+              key={gIdx}
+              className={`transition-all duration-1000 transform ${
+                isVisible
+                  ? "opacity-100 translate-y-0"
+                  : "opacity-0 translate-y-12"
+              }`}
+              style={{
+                transitionDelay: isVisible ? `${(gIdx + 3) * 200}ms` : "0ms",
+              }}
+            >
               {/* Group label */}
               <h3
                 className={`text-center text-${group.accent} font-extrabold text-2xl mb-12 flex items-center justify-center gap-4`}

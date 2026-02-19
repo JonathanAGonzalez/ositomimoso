@@ -1,22 +1,10 @@
 "use client";
 
+import { useEffect, useRef, useState } from "react";
+
 export default function Programs() {
   const programs = [
-    // {
-    //   title: "Bebés",
-    //   age: "0-1 año",
-    //   description: "Cuidado especializado en un ambiente cálido y seguro.",
-    //   icon: "👶",
-    //   emoji: "👶",
-    //   activities: [
-    //     "Estimulación temprana",
-    //     "Masajes infantiles",
-    //     "Música y movimiento",
-    //     "Rutinas de sueño y alimentación",
-    //   ],
-    //   color: "bg-brand-blue/10",
-    //   accent: "text-brand-blue",
-    // },
+    // ... items
     {
       title: "Exploradores",
       age: "1-2 años",
@@ -49,7 +37,8 @@ export default function Programs() {
     {
       title: "Constructores",
       age: "3-4 años",
-      description: "Listos para dar el gran salto a la educación primaria.",
+      description:
+        "Construcción de la identidad, la autonomía y los aprendizajes significativos.",
       icon: "📚",
       emoji: "📚",
       activities: [
@@ -81,8 +70,29 @@ export default function Programs() {
     },
   ];
 
+  const sectionRef = useRef<HTMLElement>(null);
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.15 },
+    );
+    if (sectionRef.current) observer.observe(sectionRef.current);
+    return () => observer.disconnect();
+  }, []);
+
   return (
-    <section id="programas" className="py-24 px-6 md:px-16 bg-[#fafafa]">
+    <section
+      ref={sectionRef}
+      id="programas"
+      className="py-24 px-6 md:px-16 bg-[#fafafa]"
+    >
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-16">
           <span className="inline-block px-6 py-2 rounded-full bg-brand-blue/10 text-brand-blue text-sm font-bold mb-6">
@@ -104,7 +114,12 @@ export default function Programs() {
           {programs.map((program, idx) => (
             <div
               key={idx}
-              className="bg-white rounded-[40px] shadow-xl shadow-zinc-200/50 overflow-hidden border border-zinc-50 group hover:shadow-2xl transition-all duration-500"
+              className={`bg-white rounded-[40px] shadow-xl shadow-zinc-200/50 overflow-hidden border border-zinc-50 group hover:shadow-2xl transition-all duration-700 transform ${
+                isVisible
+                  ? "opacity-100 translate-y-0"
+                  : "opacity-0 translate-y-12"
+              }`}
+              style={{ transitionDelay: isVisible ? `${idx * 150}ms` : "0ms" }}
             >
               <div className="p-8 md:p-10">
                 <div className="flex justify-between items-start mb-6">
@@ -163,7 +178,14 @@ export default function Programs() {
             {valueProps.map((prop, idx) => (
               <div
                 key={idx}
-                className="flex flex-col items-center text-center group"
+                className={`flex flex-col items-center text-center group transition-all duration-700 transform ${
+                  isVisible
+                    ? "opacity-100 translate-y-0"
+                    : "opacity-0 translate-y-8"
+                }`}
+                style={{
+                  transitionDelay: isVisible ? `${(idx + 3) * 150}ms` : "0ms",
+                }}
               >
                 <div className="w-20 h-20 bg-zinc-50 rounded-3xl flex items-center justify-center text-4xl mb-6 shadow-inner group-hover:bg-brand-blue/10 transition-colors duration-500">
                   {prop.icon}

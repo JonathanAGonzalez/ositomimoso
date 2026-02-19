@@ -1,5 +1,7 @@
 "use client";
 
+import { useEffect, useRef, useState } from "react";
+
 export default function Facilities() {
   const facilities = [
     {
@@ -55,8 +57,29 @@ export default function Facilities() {
     { title: "Videovigilancia", desc: "Monitoreo en tiempo real", icon: "📹" },
   ];
 
+  const sectionRef = useRef<HTMLElement>(null);
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.15 },
+    );
+    if (sectionRef.current) observer.observe(sectionRef.current);
+    return () => observer.disconnect();
+  }, []);
+
   return (
-    <section id="instalaciones" className="py-24 px-6 md:px-16 bg-white">
+    <section
+      ref={sectionRef}
+      id="instalaciones"
+      className="py-24 px-6 md:px-16 bg-white"
+    >
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="text-center mb-16 px-4">
@@ -85,7 +108,12 @@ export default function Facilities() {
           {facilities.map((item, idx) => (
             <div
               key={idx}
-              className="group bg-white rounded-[32px] overflow-hidden shadow-lg shadow-zinc-200/50 hover:shadow-2xl transition-all duration-500 border border-zinc-50"
+              className={`group bg-white rounded-[32px] overflow-hidden shadow-lg shadow-zinc-200/50 hover:shadow-2xl transition-all duration-700 transform border border-zinc-50 ${
+                isVisible
+                  ? "opacity-100 translate-y-0"
+                  : "opacity-0 translate-y-12"
+              }`}
+              style={{ transitionDelay: isVisible ? `${idx * 150}ms` : "0ms" }}
             >
               <div
                 className={`relative h-56 ${item.image} flex items-center justify-center text-5xl`}

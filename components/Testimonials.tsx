@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import posthog from "posthog-js";
+import { useEffect, useRef, useState } from "react";
 
 export default function Testimonials() {
   const handleCtaClick = () => {
@@ -48,8 +49,26 @@ export default function Testimonials() {
     },
   ];
 
+  const sectionRef = useRef<HTMLElement>(null);
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.1 },
+    );
+    if (sectionRef.current) observer.observe(sectionRef.current);
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <section
+      ref={sectionRef}
       id="testimonios"
       className="py-24 px-6 md:px-16 bg-white overflow-hidden"
     >
@@ -71,7 +90,12 @@ export default function Testimonials() {
           {testimonials.map((item, idx) => (
             <div
               key={idx}
-              className="bg-white p-8 rounded-[32px] shadow-xl shadow-zinc-200/50 border border-zinc-50 flex flex-col relative group hover:shadow-2xl transition-all duration-500"
+              className={`bg-white p-8 rounded-[32px] shadow-xl shadow-zinc-200/50 border border-zinc-50 flex flex-col relative group hover:shadow-2xl transition-all duration-700 transform ${
+                isVisible
+                  ? "opacity-100 translate-y-0"
+                  : "opacity-0 translate-y-12"
+              }`}
+              style={{ transitionDelay: isVisible ? `${idx * 100}ms` : "0ms" }}
             >
               <div className="flex gap-1 mb-6">
                 {[...Array(item.stars)].map((_, i) => (
@@ -108,7 +132,12 @@ export default function Testimonials() {
         </div>
 
         {/* Call to Action Banner */}
-        <div className="bg-brand-blue rounded-[40px] p-12 md:p-20 text-center relative overflow-hidden group">
+        <div
+          className={`bg-brand-blue rounded-[40px] p-12 md:p-20 text-center relative overflow-hidden group transition-all duration-1000 transform ${
+            isVisible ? "opacity-100 scale-100" : "opacity-0 scale-95"
+          }`}
+          style={{ transitionDelay: isVisible ? "600ms" : "0ms" }}
+        >
           {/* Decorative shapes */}
           <div className="absolute top-0 left-0 w-64 h-64 bg-white/10 rounded-full blur-3xl -ml-32 -mt-32 group-hover:bg-white/20 transition-all duration-1000" />
           <div className="absolute bottom-0 right-0 w-96 h-96 bg-brand-gold/10 rounded-full blur-3xl -mr-48 -mb-48" />
