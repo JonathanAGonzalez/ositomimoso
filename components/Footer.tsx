@@ -39,7 +39,7 @@ export default function Footer() {
   ];
 
   const scheduleList = [
-    { day: "Lunes - Viernes", time: "7:30 - 18:00" },
+    { day: "Lunes - Viernes", time: "8:00 - 17:00" },
     { day: "Sábado", time: "Cerrado" },
     { day: "Domingo", time: "Cerrado" },
   ];
