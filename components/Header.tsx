@@ -19,6 +19,7 @@ export default function Header() {
     "Inicio",
     "Nosotros",
     "Programas",
+    "Jornadas",
     "Instalaciones",
     "Equipo",
     "Testimonios",
@@ -240,7 +241,7 @@ export default function Header() {
       <div
         className={`fixed inset-0 bg-white z-60 lg:hidden transition-all duration-500 ease-in-out transform flex flex-col ${isOpen ? "translate-y-0 opacity-100" : "-translate-y-full opacity-0"}`}
       >
-        <div className="flex flex-col items-center justify-center grow gap-8 p-10 overflow-y-auto">
+        <div className="flex flex-col items-center justify-start grow gap-6 px-10 pt-24 pb-10 overflow-y-auto">
           {/* Close Button Inside Drawer */}
           <button
             onClick={() => setIsOpen(false)}

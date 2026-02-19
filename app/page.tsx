@@ -3,6 +3,7 @@ import Hero from "@/components/Hero";
 import Philosophy from "@/components/Philosophy";
 import Features from "@/components/Features";
 import Programs from "@/components/Programs";
+import Jornadas from "@/components/Jornadas";
 import Facilities from "@/components/Facilities";
 import Team from "@/components/Team";
 import Testimonials from "@/components/Testimonials";
@@ -23,6 +24,7 @@ export default function Home() {
         <Philosophy />
         <Features />
         <Programs />
+        <Jornadas />
         <Facilities />
         <Team />
         <Testimonials />
