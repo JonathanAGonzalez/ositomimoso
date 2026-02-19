@@ -21,14 +21,17 @@ export default function PostHogProvider({
         person_profiles: "identified_only",
         capture_pageview: false, // Disable automatic pageview capture, as we capture manually
         capture_pageleave: true, // Enable pageleave capture
-        sanitize_properties: (properties) => {
-          if (typeof properties["$current_url"] === "string") {
-            properties["$current_url"] = properties["$current_url"].replace(
-              /\/home\/?$/,
-              "",
-            );
+        before_send: (event) => {
+          if (!event) return event;
+          if (
+            event.properties &&
+            typeof event.properties["$current_url"] === "string"
+          ) {
+            event.properties["$current_url"] = event.properties[
+              "$current_url"
+            ].replace(/\/home\/?$/, "");
           }
-          return properties;
+          return event;
         },
         loaded: (posthog) => {
           if (process.env.NODE_ENV === "development") posthog.debug();

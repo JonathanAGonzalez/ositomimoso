@@ -41,92 +41,27 @@ function LoginForm() {
   };
 
   return (
-    <div
-      style={{
-        minHeight: "100vh",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        background: "linear-gradient(135deg, #0f0f13 0%, #13131a 100%)",
-        fontFamily: "'Inter', sans-serif",
-        padding: "20px",
-      }}
-    >
-      <div
-        style={{
-          width: "100%",
-          maxWidth: "400px",
-        }}
-      >
+    <div className="min-h-dvh flex items-center justify-center bg-gradient-to-br from-dash-bg to-dash-surface font-sans p-5">
+      <div className="w-full max-w-[400px]">
         {/* Logo / Header */}
-        <div style={{ textAlign: "center", marginBottom: "40px" }}>
-          <div
-            style={{
-              width: "64px",
-              height: "64px",
-              borderRadius: "20px",
-              background: "linear-gradient(135deg, #4f46e5, #7c3aed)",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              fontSize: "32px",
-              margin: "0 auto 16px",
-              boxShadow: "0 8px 32px rgba(79,70,229,0.4)",
-            }}
-          >
+        <div className="text-center mb-10">
+          <div className="w-16 h-16 rounded-[20px] bg-gradient-to-br from-dash-accent to-dash-purple flex items-center justify-center text-[32px] mx-auto mb-4 shadow-[0_8px_32px_rgba(79,70,229,0.4)]">
             🧸
           </div>
-          <h1
-            style={{
-              margin: "0 0 6px",
-              fontSize: "24px",
-              fontWeight: 700,
-              color: "#fff",
-            }}
-          >
-            Osito Mimoso
-          </h1>
-          <p style={{ margin: 0, fontSize: "14px", color: "#6b6b8a" }}>
-            Panel de administración
-          </p>
+          <h1 className="text-2xl font-bold text-white mb-1.5">Osito Mimoso</h1>
+          <p className="text-sm text-dash-muted">Panel de administración</p>
         </div>
 
         {/* Card */}
-        <div
-          style={{
-            background: "#13131a",
-            border: "1px solid #1e1e2e",
-            borderRadius: "16px",
-            padding: "32px",
-            boxShadow: "0 24px 64px rgba(0,0,0,0.5)",
-          }}
-        >
-          <h2
-            style={{
-              margin: "0 0 24px",
-              fontSize: "18px",
-              fontWeight: 600,
-              color: "#e8e8f0",
-            }}
-          >
+        <div className="bg-dash-surface border border-dash-border rounded-2xl p-8 shadow-[0_24px_64px_rgba(0,0,0,0.5)]">
+          <h2 className="text-lg font-semibold text-dash-text mb-6">
             Iniciar sesión
           </h2>
 
-          <form
-            onSubmit={handleSubmit}
-            style={{ display: "flex", flexDirection: "column", gap: "16px" }}
-          >
+          <form onSubmit={handleSubmit} className="flex flex-col gap-4">
             {/* Email */}
             <div>
-              <label
-                style={{
-                  display: "block",
-                  fontSize: "13px",
-                  fontWeight: 600,
-                  color: "#9999b8",
-                  marginBottom: "6px",
-                }}
-              >
+              <label className="block text-[13px] font-semibold text-dash-label mb-1.5">
                 Email
               </label>
               <input
@@ -136,34 +71,13 @@ function LoginForm() {
                 required
                 autoComplete="email"
                 placeholder="admin@ositomimoso.com"
-                style={{
-                  width: "100%",
-                  padding: "11px 14px",
-                  borderRadius: "10px",
-                  border: "1px solid #2a2a3e",
-                  background: "#0f0f13",
-                  color: "#e8e8f0",
-                  fontSize: "14px",
-                  outline: "none",
-                  boxSizing: "border-box",
-                  transition: "border-color 0.2s",
-                }}
-                onFocus={(e) => (e.target.style.borderColor = "#4f46e5")}
-                onBlur={(e) => (e.target.style.borderColor = "#2a2a3e")}
+                className="w-full rounded-[10px] border border-dash-input-border bg-dash-bg text-dash-text text-sm outline-none px-3.5 py-[11px] transition-colors focus:border-dash-accent"
               />
             </div>
 
             {/* Password */}
             <div>
-              <label
-                style={{
-                  display: "block",
-                  fontSize: "13px",
-                  fontWeight: 600,
-                  color: "#9999b8",
-                  marginBottom: "6px",
-                }}
-              >
+              <label className="block text-[13px] font-semibold text-dash-label mb-1.5">
                 Contraseña
               </label>
               <input
@@ -173,35 +87,13 @@ function LoginForm() {
                 required
                 autoComplete="current-password"
                 placeholder="••••••••"
-                style={{
-                  width: "100%",
-                  padding: "11px 14px",
-                  borderRadius: "10px",
-                  border: "1px solid #2a2a3e",
-                  background: "#0f0f13",
-                  color: "#e8e8f0",
-                  fontSize: "14px",
-                  outline: "none",
-                  boxSizing: "border-box",
-                  transition: "border-color 0.2s",
-                }}
-                onFocus={(e) => (e.target.style.borderColor = "#4f46e5")}
-                onBlur={(e) => (e.target.style.borderColor = "#2a2a3e")}
+                className="w-full rounded-[10px] border border-dash-input-border bg-dash-bg text-dash-text text-sm outline-none px-3.5 py-[11px] transition-colors focus:border-dash-accent"
               />
             </div>
 
             {/* Error */}
             {error && (
-              <div
-                style={{
-                  padding: "10px 14px",
-                  borderRadius: "8px",
-                  background: "rgba(220,38,38,0.1)",
-                  border: "1px solid rgba(220,38,38,0.3)",
-                  color: "#f87171",
-                  fontSize: "13px",
-                }}
-              >
+              <div className="rounded-lg border border-dash-danger/30 bg-dash-danger/10 text-dash-danger-light text-[13px] px-3.5 py-2.5">
                 ⚠️ {error}
               </div>
             )}
@@ -210,20 +102,12 @@ function LoginForm() {
             <button
               type="submit"
               disabled={loading}
-              style={{
-                padding: "12px",
-                borderRadius: "10px",
-                border: "none",
-                background: loading
-                  ? "#2a2a3e"
-                  : "linear-gradient(135deg, #4f46e5, #7c3aed)",
-                color: loading ? "#6b6b8a" : "#fff",
-                fontSize: "15px",
-                fontWeight: 600,
-                cursor: loading ? "not-allowed" : "pointer",
-                transition: "all 0.2s",
-                marginTop: "4px",
-              }}
+              className={`mt-1 rounded-[10px] border-none py-3 text-[15px] font-semibold transition-all cursor-pointer
+                ${
+                  loading
+                    ? "bg-dash-input-border text-dash-muted cursor-not-allowed"
+                    : "bg-gradient-to-br from-dash-accent to-dash-purple text-white hover:opacity-90"
+                }`}
             >
               {loading ? "Ingresando..." : "Ingresar →"}
             </button>

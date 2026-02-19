@@ -21,7 +21,26 @@ html {
   --color-brand-text: #4a4a4a;
   --color-brand-pink: #ff85a1;
   --color-brand-gold: #ffd25d;
+
+  /* Dashboard palette */
+  --color-dash-bg: #0f0f13;
+  --color-dash-surface: #13131a;
+  --color-dash-border: #1e1e2e;
+  --color-dash-hover: #1a1a28;
+  --color-dash-selected: #1e1e30;
+  --color-dash-input: #1a1a28;
+  --color-dash-input-border: #2a2a3e;
+  --color-dash-text: #e8e8f0;
+  --color-dash-muted: #6b6b8a;
+  --color-dash-label: #9999b8;
+  --color-dash-accent: #4f46e5;
+  --color-dash-accent-light: #818cf8;
+  --color-dash-purple: #7c3aed;
+  --color-dash-danger: #dc2626;
+  --color-dash-danger-light: #f87171;
+  --color-dash-success: #059669;
 }
+
 
 @media (prefers-color-scheme: dark) {
   :root {
