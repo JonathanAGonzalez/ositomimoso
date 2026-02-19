@@ -6,7 +6,7 @@ export async function GET() {
   try {
     await connectDB();
 
-    const conversations = await Conversation.find({})
+    const conversations = await Conversation.find({ archived: { $ne: true } })
       .sort({ lastMessageAt: -1 })
       .lean();
 

@@ -6,11 +6,13 @@ export default function ChatHeader({
   togglingBot,
   onToggleBot,
   onBack,
+  onDelete,
 }: {
   conv: Conversation | null;
   togglingBot: boolean;
   onToggleBot: () => void;
   onBack: () => void;
+  onDelete: () => void;
 }) {
   if (!conv) return null;
 
@@ -41,17 +43,28 @@ export default function ChatHeader({
         </div>
       </div>
 
-      <button
-        onClick={onToggleBot}
-        disabled={togglingBot}
-        className={`shrink-0 rounded-full border-none px-3.5 py-[7px] text-xs font-semibold whitespace-nowrap transition-all cursor-pointer disabled:cursor-not-allowed ${
-          conv.botActive
-            ? "bg-dash-danger/15 text-dash-danger-light"
-            : "bg-dash-accent/15 text-dash-accent-light"
-        }`}
-      >
-        {conv.botActive ? "🔕 Pausar bot" : "🤖 Activar bot"}
-      </button>
+      <div className="flex items-center gap-2">
+        <button
+          onClick={onToggleBot}
+          disabled={togglingBot}
+          className={`shrink-0 rounded-full border-none px-3.5 py-[7px] text-xs font-semibold whitespace-nowrap transition-all cursor-pointer disabled:cursor-not-allowed ${
+            conv.botActive
+              ? "bg-dash-danger/15 text-dash-danger-light"
+              : "bg-dash-accent/15 text-dash-accent-light"
+          }`}
+        >
+          {conv.botActive ? "🔕 Pausar bot" : "🤖 Activar bot"}
+        </button>
+
+        <button
+          onClick={onDelete}
+          className="shrink-0 w-8 h-8 rounded-full border-none bg-dash-danger/15 text-dash-danger-light flex items-center justify-center cursor-pointer transition-colors hover:bg-dash-danger/30"
+          aria-label="Eliminar conversación"
+          title="Eliminar conversación"
+        >
+          🗑️
+        </button>
+      </div>
     </div>
   );
 }

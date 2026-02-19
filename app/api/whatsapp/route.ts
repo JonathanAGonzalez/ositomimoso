@@ -109,12 +109,14 @@ export async function POST(req: NextRequest) {
             });
             console.log(`📝 Nueva conversación creada para ${from}`);
           } else {
-            // Actualizar nombre si cambió y fecha del último mensaje
+            // Actualizar nombre si cambió, fecha del último mensaje,
+            // y desarchivar si estaba archivada (nuevo mensaje = conversación activa)
             await Conversation.updateOne(
               { _id: conversation._id },
               {
                 contactName: contactName || conversation.contactName,
                 lastMessageAt: new Date(),
+                archived: false,
               },
             );
           }

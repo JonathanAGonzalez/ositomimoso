@@ -11,6 +11,7 @@ import ChatHeader from "./components/ChatHeader";
 import MessageBubble from "./components/MessageBubble";
 import MessageInput from "./components/MessageInput";
 import EmptyState from "./components/EmptyState";
+import ConfirmDeleteModal from "./components/ConfirmDeleteModal";
 import type { Message } from "./types";
 
 export default function DashboardClient({ user }: { user: User }) {
@@ -22,6 +23,8 @@ export default function DashboardClient({ user }: { user: User }) {
   const [sending, setSending] = useState(false);
   const [togglingBot, setTogglingBot] = useState(false);
   const [showSidebar, setShowSidebar] = useState(true);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [deleting, setDeleting] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   // ─── Data fetching ──────────────────────────────────
@@ -118,6 +121,25 @@ export default function DashboardClient({ user }: { user: User }) {
     }
   };
 
+  const handleDeleteConversation = async () => {
+    if (!selectedId || deleting) return;
+    setDeleting(true);
+    try {
+      await fetch(`/api/dashboard/conversations/${selectedId}/delete`, {
+        method: "DELETE",
+      });
+      setConversations((prev) => prev.filter((c) => c._id !== selectedId));
+      setSelectedId(null);
+      setSelectedConv(null);
+      setMessages([]);
+      setShowDeleteModal(false);
+    } catch (err) {
+      console.error("Error eliminando conversación:", err);
+    } finally {
+      setDeleting(false);
+    }
+  };
+
   // ─── Render ─────────────────────────────────────────
   const sidebarHidden = !!(selectedId && !showSidebar);
 
@@ -160,6 +182,7 @@ export default function DashboardClient({ user }: { user: User }) {
               togglingBot={togglingBot}
               onToggleBot={handleToggleBot}
               onBack={() => setShowSidebar(true)}
+              onDelete={() => setShowDeleteModal(true)}
             />
 
             {/* Messages */}
@@ -180,6 +203,15 @@ export default function DashboardClient({ user }: { user: User }) {
           </>
         )}
       </main>
+
+      {showDeleteModal && selectedConv && (
+        <ConfirmDeleteModal
+          contactName={selectedConv.contactName || selectedConv.phoneNumber}
+          onConfirm={handleDeleteConversation}
+          onCancel={() => setShowDeleteModal(false)}
+          deleting={deleting}
+        />
+      )}
     </div>
   );
 }
