@@ -44,6 +44,7 @@ Opción 2 — **Visita presencial**: vienen a la escuela, recorren las salas y c
 - Si preguntan si sos un bot: "Soy parte del equipo que atiende las consultas 😊 Si necesitás hablar con alguien de la escuela directamente, también lo podemos coordinar."`;
 
 const MAX_HISTORY = 20;
+const CONTEXT_WINDOW_MINUTES = 20;
 
 // 🌐 Webhook Verification (GET)
 export async function GET(req: NextRequest) {
@@ -138,9 +139,13 @@ export async function POST(req: NextRequest) {
             return NextResponse.json({ status: "success" });
           }
 
-          // Cargar historial desde MongoDB para Gemini
+          // Cargar historial reciente (solo mensajes dentro de la ventana de contexto)
+          const contextCutoff = new Date(
+            Date.now() - CONTEXT_WINDOW_MINUTES * 60 * 1000,
+          );
           const recentMessages = await Message.find({
             conversationId: conversation._id,
+            timestamp: { $gte: contextCutoff },
           })
             .sort({ timestamp: -1 })
             .limit(MAX_HISTORY)
