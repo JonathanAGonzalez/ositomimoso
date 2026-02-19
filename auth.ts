@@ -23,18 +23,27 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 
         try {
           await connectDB();
-          const user = await User.findOne({
-            email: String(credentials.email).toLowerCase(),
-          }).lean();
+          const emailInput = String(credentials.email).toLowerCase();
+          console.log("[Auth] Buscando usuario con email:", emailInput);
 
-          if (!user) return null;
+          const user = await User.findOne({ email: emailInput }).lean();
+
+          if (!user) {
+            console.log("[Auth] ❌ Usuario NO encontrado en la DB");
+            return null;
+          }
+          console.log("[Auth] ✅ Usuario encontrado:", user.email);
 
           const isValid = await bcrypt.compare(
             String(credentials.password),
             user.passwordHash,
           );
 
-          if (!isValid) return null;
+          if (!isValid) {
+            console.log("[Auth] ❌ Contraseña incorrecta");
+            return null;
+          }
+          console.log("[Auth] ✅ Contraseña válida");
 
           return {
             id: String(user._id),

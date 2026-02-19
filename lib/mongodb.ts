@@ -1,9 +1,12 @@
 import mongoose from "mongoose";
 
-const MONGODB_URI = process.env.MONGODB_URI!;
+// Si existe MONGODB_URI_LOCAL (desarrollo), la usa. Si no, usa MONGODB_URI (producción).
+const MONGODB_URI = process.env.MONGODB_URI_LOCAL || process.env.MONGODB_URI;
 
 if (!MONGODB_URI) {
-  throw new Error("MONGODB_URI no está definida en las variables de entorno");
+  throw new Error(
+    "Ni MONGODB_URI_LOCAL ni MONGODB_URI están definidas en las variables de entorno",
+  );
 }
 
 // Cache de conexión para evitar múltiples conexiones en desarrollo (hot reload)
@@ -29,7 +32,7 @@ export async function connectDB(): Promise<typeof mongoose> {
   }
 
   if (!cached.promise) {
-    cached.promise = mongoose.connect(MONGODB_URI, {
+    cached.promise = mongoose.connect(MONGODB_URI as string, {
       bufferCommands: false,
     });
   }
