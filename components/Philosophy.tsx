@@ -67,15 +67,16 @@ export default function Philosophy() {
 
             <div className="space-y-6 text-zinc-500 text-lg leading-relaxed mb-10">
               <p>
-                Durante más de <span className="font-bold"> 35 años</span> hemos
+                Durante más de <span className="font-bold"> 36 años</span> hemos
                 estado junto a familias como la tuya, acompañando la etapa más
-                preciosa: la primera infancia. Nuestro equipo de profesionales
+                importante: la primera infancia. Nuestro equipo de profesionales
                 apasionados y calificados crea experiencias de aprendizaje que
                 inspiran curiosidad, confianza y felicidad en cada niño.
                 Entendemos lo importante que son los primeros años para el
-                desarrollo integral. Por eso combinamos metodologías pedagógicas
-                innovadoras con un ambiente cálido y afectuoso donde cada
-                pequeño se siente seguro, querido y motivado a explorar.
+                desarrollo integral. Por eso combinamos Diferentes estrategias
+                pedagógicas innovadoras con un ambiente cálido y afectuoso.
+                Dónde cada niño se siente contenido seguro y motivado a explorar
+                libremente.
               </p>
             </div>
 

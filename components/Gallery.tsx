@@ -83,9 +83,9 @@ export default function Gallery() {
             Nuestros Momentos
           </span>
           <h2 className="text-4xl md:text-5xl font-extrabold text-brand-text mb-6">
-            Un vistazo a nuestra{" "}
+            Una mirada a nuestras
             <span className="font-script italic text-brand-blue font-normal">
-              vida diaria
+              experiencias cotidianas
             </span>
           </h2>
           <p className="text-zinc-400 max-w-2xl mx-auto text-lg leading-relaxed">

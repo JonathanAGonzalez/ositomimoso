@@ -2,21 +2,21 @@
 
 export default function Programs() {
   const programs = [
-    {
-      title: "Bebés",
-      age: "0-1 año",
-      description: "Cuidado especializado en un ambiente cálido y seguro.",
-      icon: "👶",
-      emoji: "👶",
-      activities: [
-        "Estimulación temprana",
-        "Masajes infantiles",
-        "Música y movimiento",
-        "Rutinas de sueño y alimentación",
-      ],
-      color: "bg-brand-blue/10",
-      accent: "text-brand-blue",
-    },
+    // {
+    //   title: "Bebés",
+    //   age: "0-1 año",
+    //   description: "Cuidado especializado en un ambiente cálido y seguro.",
+    //   icon: "👶",
+    //   emoji: "👶",
+    //   activities: [
+    //     "Estimulación temprana",
+    //     "Masajes infantiles",
+    //     "Música y movimiento",
+    //     "Rutinas de sueño y alimentación",
+    //   ],
+    //   color: "bg-brand-blue/10",
+    //   accent: "text-brand-blue",
+    // },
     {
       title: "Exploradores",
       age: "1-2 años",
@@ -40,7 +40,6 @@ export default function Programs() {
       emoji: "🎨",
       activities: [
         "Arte y creatividad",
-        "Pre-escritura",
         "Autonomía personal",
         "Educación emocional",
       ],
@@ -48,16 +47,16 @@ export default function Programs() {
       accent: "text-brand-pink",
     },
     {
-      title: "Preparados",
-      age: "3-6 años",
+      title: "Constructores",
+      age: "3-4 años",
       description: "Listos para dar el gran salto a la educación primaria.",
       icon: "📚",
       emoji: "📚",
       activities: [
-        "Pre-lectura y matemáticas",
-        "Inglés intensivo",
-        "Proyectos educativos",
-        "Preparación para primaria",
+        "Expresión artística (música y literatura)",
+        "Lenguaje y comunicación",
+        "Pensamiento lógico-matemático",
+        "Desarrollo socio-emocional",
       ],
       color: "bg-brand-gold/15",
       accent: "text-brand-gold",
@@ -71,13 +70,13 @@ export default function Programs() {
       icon: "🎨",
     },
     {
-      title: "Educación Bilingüe",
-      desc: "Inmersión natural en inglés desde temprana edad",
-      icon: "🌍",
+      title: "Talleres",
+      desc: "Música, Inglés, Expresión Corporal",
+      icon: "🎵",
     },
     {
       title: "Grupos Reducidos",
-      desc: "Atención personalizada para cada pequeño",
+      desc: "Atención personalizada para cada niño",
       icon: "👥",
     },
   ];
@@ -101,7 +100,7 @@ export default function Programs() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-20">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-20">
           {programs.map((program, idx) => (
             <div
               key={idx}

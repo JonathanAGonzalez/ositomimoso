@@ -62,7 +62,7 @@ export default function Footer() {
               </span>
             </div>
             <p className="text-zinc-500 text-base leading-relaxed mb-8 max-w-xs">
-              Un espacio donde los niños crecen felices, seguros y amados.
+              Educación inicial con compromiso y calidez.
             </p>
             <div className="flex gap-3">
               {socialIcons.map((social, idx) => (

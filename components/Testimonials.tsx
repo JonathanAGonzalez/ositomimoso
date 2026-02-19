@@ -124,7 +124,7 @@ export default function Testimonials() {
             <p className="text-white/80 max-w-2xl mx-auto text-lg mb-10">
               Te invitamos a conocer nuestras instalaciones y nuestro proyecto
               educativo. <br />
-              ¡Te esperamos con los brazos abiertos!
+              ¡Te esperamos!
             </p>
             <Link
               href="https://wa.me/5491148725474?text=¡Hola!%20Me%20gustaría%20agendar%20una%20visita%20para%20conocer%20el%20jardín."

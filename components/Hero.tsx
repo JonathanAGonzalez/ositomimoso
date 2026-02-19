@@ -53,9 +53,7 @@ export default function Hero() {
           y{" "}
           <span className="font-script italic text-brand-brown font-normal">
             jugar
-          </span>{" "}
-          <br />
-          para niños
+          </span>
         </h1>
 
         <p className="text-zinc-500 text-lg md:text-xl max-w-2xl mb-10 leading-relaxed">
@@ -98,7 +96,7 @@ export default function Hero() {
           <div className="bg-white p-8 rounded-3xl shadow-xl shadow-zinc-200/50 flex flex-col items-center transform transition-all duration-300 hover:scale-105">
             <div className="mb-4 text-3xl">🎓</div>
             <h3 className="text-4xl font-extrabold text-brand-blue mb-1">
-              35+
+              36+
             </h3>
             <p className="text-zinc-400 font-medium whitespace-nowrap">
               Años de Experiencia
@@ -108,7 +106,7 @@ export default function Hero() {
           <div className="bg-white p-8 rounded-3xl shadow-xl shadow-zinc-200/50 flex flex-col items-center transform transition-all duration-300 hover:scale-105 border-b-4 border-brand-pink">
             <div className="mb-4 text-3xl">❤️</div>
             <h3 className="text-4xl font-extrabold text-brand-pink mb-1">
-              800+
+              1400+
             </h3>
             <p className="text-zinc-400 font-medium whitespace-nowrap">
               Familias Felices

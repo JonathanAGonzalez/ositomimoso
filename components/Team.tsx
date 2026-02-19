@@ -3,8 +3,8 @@
 export default function Team() {
   const pillars = [
     {
-      title: "Formación Especializada",
-      desc: "Contamos con docentes tituladas y especialistas en estimulación temprana, psicomotricidad y nutrición infantil.",
+      title: "Formación especializada",
+      desc: "Nuestro equipo educativo cuenta con docentes capacitadas y título habilitante. Contamos con gabinete psicopedagógico de forma permanente.",
       icon: "🎓",
       color: "bg-brand-blue/10",
     },
@@ -15,8 +15,8 @@ export default function Team() {
       color: "bg-brand-pink/10",
     },
     {
-      title: "Seguridad y Protocolos",
-      desc: "Todo nuestro personal está capacitado en primeros auxilios pediátricos y protocolos de cuidado integral.",
+      title: "Calidad y confianza",
+      desc: "Acompañamos cada momento con responsabilidad, atención y protocolos claros que garantizan el bienestar y la tranquilidad de cada familia.",
       icon: "🛡️",
       color: "bg-brand-brown/10",
     },
@@ -74,10 +74,11 @@ export default function Team() {
 
           <p className="text-zinc-500 text-lg leading-relaxed mb-8 relative z-10">
             En <span className="text-brand-blue font-bold">Osito Mimoso</span>,
-            entendemos que dejas en nuestras manos lo más valioso. Por eso,
-            nuestro equipo trabaja de forma interdisciplinaria, supervisando
-            cada etapa del desarrollo con una mirada{" "}
-            <span className="italic font-medium">amorosa y profesional</span>.
+            entendemos que dejas en nuestras manos lo más valioso. Por ello,
+            trabajamos de manera interdisciplinaria para acompañar el desarrollo
+            desde una perspectiva integral, considerando al niño como un sujeto
+            único, cuyas dimensiones emocionales, sociales y cognitivas se
+            integran y potencian entre sí.
           </p>
 
           <p className="text-zinc-300 text-xs md:text-sm font-medium italic relative z-10">

@@ -16,16 +16,16 @@ export default function Facilities() {
     },
     {
       title: "Comedor",
-      desc: "Cocina propia con menús equilibrados supervisados por nutricionistas.",
+      desc: "Alimentación modalidad con vianda.",
       icon: "🍎",
       image: "bg-linear-to-br from-brand-pink/20 to-brand-brown/20",
     },
-    {
-      title: "Salas de Descanso",
-      desc: "Espacios tranquilos y acogedores para la siesta y el descanso.",
-      icon: "😴",
-      image: "bg-linear-to-br from-brand-blue/20 to-brand-gold/20",
-    },
+    // {
+    //   title: "Salas de Descanso",
+    //   desc: "Espacios tranquilos y acogedores para la siesta y el descanso.",
+    //   icon: "😴",
+    //   image: "bg-linear-to-br from-brand-blue/20 to-brand-gold/20",
+    // },
     {
       title: "Sala Sensorial",
       desc: "Equipada con materiales para estimular los sentidos y el desarrollo.",
@@ -113,7 +113,7 @@ export default function Facilities() {
         </div>
 
         {/* Security Banner */}
-        <div className="bg-white rounded-[40px] p-10 md:p-16 shadow-2xl shadow-zinc-200/60 border border-zinc-100 relative overflow-hidden group">
+        {/* <div className="bg-white rounded-[40px] p-10 md:p-16 shadow-2xl shadow-zinc-200/60 border border-zinc-100 relative overflow-hidden group">
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-linear-to-r from-brand-blue/5 via-transparent to-brand-brown/5 opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
 
           <div className="text-center mb-12 relative z-10">
@@ -141,7 +141,7 @@ export default function Facilities() {
               </div>
             ))}
           </div>
-        </div>
+        </div> */}
       </div>
     </section>
   );

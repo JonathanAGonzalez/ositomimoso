@@ -34,15 +34,15 @@ export default function Contact() {
     },
     {
       title: "Ubicación",
-      desc: "Aguero 508",
-      value: "CABA, Argentina",
+      desc: "Aguero 508, CABA, Argentina",
+      value: "Frente al shopping abasto",
       icon: "📍",
       color: "bg-brand-brown/10",
     },
     {
       title: "Horario",
-      desc: "Lun - Vie: 7:30 - 18:00",
-      value: "Sábados: 9:00 - 14:00",
+      desc: "Lun - Vie: 8:00 - 17:00",
+      value: "Sábados y Domingos: cerrado",
       icon: "⏰",
       color: "bg-brand-gold/15",
     },
@@ -137,8 +137,7 @@ export default function Contact() {
                   Agenda tu visita presencial
                 </Link>
 
-                {/* Calendly CTA */}
-                <Link
+                {/* <Link
                   href="/agendar-visita"
                   onClick={handleVirtualMeetingClick}
                   className="flex items-center gap-3 px-8 py-3.5 bg-brand-blue text-white rounded-full font-bold shadow-lg shadow-brand-blue/20 hover:bg-brand-blue/90 transition-all transform hover:-translate-y-1 hover:scale-105 active:scale-95 text-sm md:text-base cursor-pointer"
@@ -165,7 +164,7 @@ export default function Contact() {
                     <path d="M12 18h.01" />
                   </svg>
                   Reunión Virtual
-                </Link>
+                </Link> */}
               </div>
 
               {/* Secondary Info */}
