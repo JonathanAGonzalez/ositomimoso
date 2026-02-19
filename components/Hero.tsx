@@ -37,7 +37,6 @@ export default function Hero() {
         {/* Center Logo */}
         <div className="mb-8 flex flex-col items-center">
           <div className="w-24 h-24 bg-white shadow-xl rounded-2xl flex items-center justify-center p-2 mb-2 rotate-3 hover:rotate-0 transition-transform duration-500">
-            {/* Replace with actual image later if available */}
             <div className="w-full h-full bg-brand-blue/10 rounded-xl flex items-center justify-center">
               <span className="text-3xl">🐻</span>
             </div>

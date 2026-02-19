@@ -62,7 +62,7 @@ export default function Header() {
 
     const observerOptions = {
       root: null,
-      rootMargin: "-10% 0px -80% 0px",
+      rootMargin: "-30% 0px -50% 0px", // Active zone around the middle-top
       threshold: 0,
     };
 
@@ -93,8 +93,23 @@ export default function Header() {
       if (element) observer.observe(element);
     });
 
+    // Fallback for bottom of page (Contact)
+    const handleBottomScroll = () => {
+      if (isManualScroll.current) return;
+      if (
+        window.innerHeight + window.scrollY >=
+        document.body.offsetHeight - 100
+      ) {
+        setActive("Contacto");
+        window.history.replaceState(null, "", "#contacto");
+      }
+    };
+
+    window.addEventListener("scroll", handleBottomScroll);
+
     return () => {
       observer.disconnect();
+      window.removeEventListener("scroll", handleBottomScroll);
       if (timeoutRef.current) clearTimeout(timeoutRef.current);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
