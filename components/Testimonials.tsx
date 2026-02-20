@@ -3,6 +3,7 @@
 import Link from "next/link";
 import posthog from "posthog-js";
 import { useEffect, useRef, useState } from "react";
+import { getWhatsAppUrl } from "@/src/utils/whatsapp";
 
 export default function Testimonials() {
   const handleCtaClick = () => {
@@ -12,39 +13,39 @@ export default function Testimonials() {
   };
   const testimonials = [
     {
-      text: "Osito Mimoso ha sido un verdadero regalo para nuestra familia. Lucas va feliz cada día y hemos visto un desarrollo increíble en tan poco tiempo.",
-      author: "Patricia y Carlos",
-      child: "Padres de Lucas (2 años)",
+      text: "Muy buena atención con los niños, lugar impecable! En este hermoso jardín de 🐻 Mimoso, van a encontrar unas de las cosas más importantes, la confianza y el cuidado que tienen hacia nuestros niños, lo super recomiendo !!!",
+      author: "Daniela Elizabeth",
+      child: "Hace un año",
       stars: 5,
     },
     {
-      text: "Como madre primeriza, tenía muchas dudas. El equipo de Osito Mimoso me ha dado toda la confianza y tranquilidad que necesitaba.",
-      author: "Marta Sánchez",
-      child: "Mamá de Emma (1 año)",
+      text: "Super recomendable, mi hija fue al maternal y al inicial siempre entraba contenta y salía contenta del jardín! Vamos a extrañar mucho 🥹 Queremos agradecer también a las seños y directivos por cuidar tanto a nuestra hija.",
+      author: "Jorge Ortiz",
+      child: "Hace 11 meses",
       stars: 5,
     },
     {
-      text: "Llevamos tres años en Osito Mimoso y no podríamos estar más contentos. Sofía ha aprendido tanto y ha hecho amigos maravillosos.",
-      author: "Jorge y Ana",
-      child: "Padres de Sofía (3 años)",
+      text: "Hermoso jardín, un lugar lleno de juegos, en dónde los niños/as aprenden jugando y nos dejan una huella en nuestros corazones.",
+      author: "Usuario de Google",
+      child: "Hace 11 meses",
       stars: 5,
     },
     {
-      text: "La atención personalizada y el cariño que recibe David cada día es invaluable. Es más que una escuela, es una segunda familia.",
-      author: "Raquel Moreno",
-      child: "Mamá de David (4 años)",
+      text: "Mis más agradecimientos! Queremos primaria!!!",
+      author: "Deportivo Centenario",
+      child: "Hace 11 meses",
       stars: 5,
     },
     {
-      text: "Elegir Osito Mimoso fue la mejor decisión. Martina disfruta cada actividad y ha desarrollado una curiosidad increíble por aprender.",
-      author: "Miguel y Laura",
-      child: "Padres de Martina (2 años)",
+      text: "Excelente jardín, muy recomendado y un gran ambiente para llevar a tus hijas/os. 🙏",
+      author: "JUANMA PROX",
+      child: "Hace 2 años",
       stars: 5,
     },
     {
-      text: "Lo que más valoro es la comunicación constante y la profesionalidad del equipo. Pablo ha crecido mucho emocionalmente.",
-      author: "Isabel Ruiz",
-      child: "Mamá de Pablo (3 años)",
+      text: "lo mejor . tu segunda casa!",
+      author: "abasto eventos",
+      child: "Hace 6 años",
       stars: 5,
     },
   ];
@@ -156,7 +157,9 @@ export default function Testimonials() {
               ¡Te esperamos!
             </p>
             <Link
-              href="https://wa.me/5491148725474?text=¡Hola!%20Me%20gustaría%20agendar%20una%20visita%20para%20conocer%20el%20jardín."
+              href={getWhatsAppUrl(
+                "¡Hola! Me gustaría agendar una visita para conocer el jardín.",
+              )}
               target="_blank"
               rel="noopener noreferrer"
               onClick={handleCtaClick}

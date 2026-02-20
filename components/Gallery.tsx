@@ -3,6 +3,18 @@
 import React, { useEffect, useRef, useState } from "react";
 import posthog from "posthog-js";
 
+import Image from "next/image";
+import img1 from "@/src/assets/avioncito.png";
+import img2 from "@/src/assets/establecimiento/2.jpg";
+import img3 from "@/src/assets/establecimiento/3.jpg";
+import img4 from "@/src/assets/establecimiento/4.jpg";
+import img5 from "@/src/assets/establecimiento/5.jpg";
+import img6 from "@/src/assets/establecimiento/6.jpg";
+import img7 from "@/src/assets/establecimiento/7.jpg";
+import img8 from "@/src/assets/establecimiento/8.jpg";
+import img9 from "@/src/assets/establecimiento/9.jpg";
+import img10 from "@/src/assets/establecimiento/10.jpg";
+
 export default function Gallery() {
   const [activeFilter, setActiveFilter] = useState("Todas");
 
@@ -18,51 +30,73 @@ export default function Gallery() {
   const photos = [
     {
       id: 1,
-      category: "Espacios",
-      title: "Aula Creativa",
+      category: "Aire Libre",
+      title: "Hora de viajar",
       size: "large",
-      emoji: "🎨",
-      color: "bg-brand-blue/10",
+      image: img1,
     },
     {
       id: 2,
       category: "Actividades",
       title: "Hora del Cuento",
       size: "small",
-      emoji: "📚",
-      color: "bg-brand-pink/10",
+      image: img2,
     },
     {
       id: 3,
-      category: "Aire Libre",
-      title: "Patio de Juegos",
+      category: "Actividades",
+      title: "Construyendo Sueños",
       size: "medium",
-      emoji: "🌳",
-      color: "bg-brand-brown/10",
+      image: img3,
     },
     {
       id: 4,
-      category: "Espacios",
-      title: "Zona de Descanso",
+      category: "Actividades",
+      title: "Juego Simbólico",
       size: "medium",
-      emoji: "😴",
-      color: "bg-brand-gold/15",
+      image: img4,
     },
     {
       id: 5,
-      category: "Actividades",
-      title: "Música y Ritmo",
-      size: "large",
-      emoji: "🎵",
-      color: "bg-brand-blue/10",
+      category: "Espacios",
+      title: "Pasillos Coloridos",
+      size: "small",
+      image: img5,
     },
     {
       id: 6,
-      category: "Aire Libre",
-      title: "Huerto Escolar",
+      category: "Actividades",
+      title: "Fiestas Temáticas",
+      size: "large",
+      image: img6,
+    },
+    {
+      id: 7,
+      category: "Espacios",
+      title: "Sala de Juegos",
       size: "small",
-      emoji: "🌱",
-      color: "bg-brand-pink/10",
+      image: img7,
+    },
+    {
+      id: 8,
+      category: "Actividades",
+      title: "Trabajo en Equipo",
+      size: "medium",
+      image: img8,
+    },
+    {
+      id: 9,
+      category: "Actividades",
+      title: "Compartiendo Momentos",
+      size: "large",
+      image: img9,
+    },
+    {
+      id: 10,
+      category: "Espacios",
+      title: "Nos divertimos aprendiendo",
+      size: "small",
+      image: img10,
     },
   ];
 
@@ -145,15 +179,17 @@ export default function Gallery() {
               `}
               style={{ transitionDelay: isVisible ? `${idx * 150}ms` : "0ms" }}
             >
-              {/* Background with Gradient/Pattern */}
-              <div
-                className={`absolute inset-0 ${photo.color} group-hover:scale-110 transition-transform duration-1000 flex items-center justify-center text-8xl`}
-              >
-                <span className="opacity-30 filter blur-[1px] group-hover:blur-0 group-hover:opacity-100 transition-all duration-700">
-                  {photo.emoji}
-                </span>
-                {/* Decorative Pattern Overlay */}
-                <div className="absolute inset-0 opacity-[0.03] bg-[radial-gradient(#000_1px,transparent_1px)] bg-size-[20px_20px]" />
+              {/* Image */}
+              <div className="absolute inset-0 group-hover:scale-110 transition-transform duration-1000">
+                <Image
+                  src={photo.image}
+                  alt={photo.title}
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                  placeholder="blur"
+                />
+                <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors duration-500" />
               </div>
 
               {/* Info Overlay */}

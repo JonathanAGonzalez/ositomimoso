@@ -1,4 +1,6 @@
 "use client";
+import Image from "next/image";
+import philosophyImg from "@/src/assets/establecimiento/11.jpg";
 
 export default function Philosophy() {
   const tags = [
@@ -96,14 +98,16 @@ export default function Philosophy() {
           <div className="order-1 lg:order-2 relative">
             {/* Main Image Container */}
             <div className="relative rounded-[40px] overflow-hidden shadow-2xl transform rotate-2 hover:rotate-0 transition-transform duration-700 aspect-4/3 bg-zinc-100 border-8 border-white">
-              {/* Using a placeholder for the Lego image since tool failed, but styled to look premium */}
-              <div className="absolute inset-0 bg-linear-to-br from-brand-blue/20 to-brand-gold/20 flex items-center justify-center text-6xl">
-                🧩
-              </div>
-              {/* This would be the actual Image component once URI is available */}
-              {/* <Image src="/images/activities.jpg" alt="Actividades creativas" fill className="object-cover" /> */}
+              <Image
+                src={philosophyImg}
+                alt="Actividades creativas en Osito Mimoso"
+                fill
+                className="object-cover"
+                placeholder="blur"
+                sizes="(max-width: 768px) 100vw, 50vw"
+              />
             </div>
-
+            {/* ... rest of the component ... */}
             {/* Floating Card: Emoji */}
             <div className="absolute -top-6 -right-6 w-20 h-20 bg-white rounded-2xl shadow-xl flex items-center justify-center text-4xl animate-bounce-slow border border-zinc-50">
               😋

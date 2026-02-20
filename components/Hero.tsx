@@ -1,6 +1,7 @@
 "use client";
 
 import posthog from "posthog-js";
+import { getWhatsAppUrl } from "@/src/utils/whatsapp";
 
 export default function Hero() {
   const handleCtaClick = () => {
@@ -15,8 +16,12 @@ export default function Hero() {
     posthog.capture("hero_schedule_visit_click", {
       button_text: "Agendar una visita",
     });
-    // Scroll to contact section
-    document.getElementById("contacto")?.scrollIntoView({ behavior: "smooth" });
+    window.open(
+      getWhatsAppUrl(
+        "¡Hola! Me gustaría agendar una visita para conocer el jardín.",
+      ),
+      "_blank",
+    );
   };
 
   return (
@@ -35,14 +40,14 @@ export default function Hero() {
 
       <div className="relative z-10 flex flex-col items-center max-w-5xl text-center">
         {/* Center Logo */}
-        <div className="mb-8 flex flex-col items-center">
+        {/* <div className="mb-8 flex flex-col items-center">
           <div className="w-24 h-24 bg-white shadow-xl rounded-2xl flex items-center justify-center p-2 mb-2 rotate-3 hover:rotate-0 transition-transform duration-500">
             <div className="w-full h-full bg-brand-blue/10 rounded-xl flex items-center justify-center">
               <span className="text-3xl">🐻</span>
             </div>
           </div>
           <p className="font-script text-2xl text-zinc-400">osito mimoso</p>
-        </div>
+        </div> */}
 
         <h1 className="text-4xl md:text-6xl lg:text-7xl font-extrabold text-brand-text leading-tight mb-6">
           El mejor lugar para <br />

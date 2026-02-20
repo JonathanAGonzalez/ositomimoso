@@ -1,6 +1,19 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
+import patioImg from "@/src/assets/establecimiento/patio_exterior.png";
+import aulaDeJuegos from "@/src/assets/establecimiento/aula_juegos.jpg";
+import multiSensorialImg from "@/src/assets/establecimiento/multi-sensorial.webp";
+import viandaImg from "@/src/assets/vianda.png";
+import sensorialImg from "@/src/assets/sensorial.png";
+// Note: We might need to move the video to public if this import fails, but trying this first.
+// If it fails, I'll help the user move it. For now, assuming we can get a URL or need a loader.
+// Since Next.js doesn't import videos by default without config, I'll use the path relative to public if I move it,
+// OR I'll try to Require it if user has a loader.
+// actually, let's use the file path if it's in public, but it's in src/assets.
+// I will move the video to public to ensure it works reliable.
+// But first let's import the images.
 
 export default function Facilities() {
   const facilities = [
@@ -8,37 +21,37 @@ export default function Facilities() {
       title: "Aulas de Juego",
       desc: "Espacios amplios y luminosos diseñados para estimular la creatividad y el aprendizaje.",
       icon: "🎨",
-      image: "bg-linear-to-br from-brand-blue/20 to-brand-pink/20",
+      gradient: "bg-linear-to-br from-brand-blue/20 to-brand-pink/20",
+      image: aulaDeJuegos,
     },
     {
       title: "Patio Exterior",
       desc: "Zona de juegos al aire libre con áreas seguras y sombra natural.",
       icon: "🌳",
-      image: "bg-linear-to-br from-brand-brown/20 to-brand-gold/20",
+      gradient: "bg-linear-to-br from-brand-brown/20 to-brand-gold/20",
+      image: patioImg,
     },
     {
-      title: "Comedor",
-      desc: "Alimentación modalidad con vianda.",
+      title: "Modalidad de Vianda",
+      desc: "Espacio acondicionado para el almuerzo donde los niños traen su comida de casa.",
       icon: "🍎",
-      image: "bg-linear-to-br from-brand-pink/20 to-brand-brown/20",
+      gradient: "bg-linear-to-br from-brand-pink/20 to-brand-brown/20",
+      image: viandaImg,
     },
-    // {
-    //   title: "Salas de Descanso",
-    //   desc: "Espacios tranquilos y acogedores para la siesta y el descanso.",
-    //   icon: "😴",
-    //   image: "bg-linear-to-br from-brand-blue/20 to-brand-gold/20",
-    // },
     {
       title: "Sala Sensorial",
       desc: "Equipada con materiales para estimular los sentidos y el desarrollo.",
       icon: "✨",
-      image: "bg-linear-to-br from-brand-gold/20 to-brand-pink/20",
+      gradient: "bg-linear-to-br from-brand-gold/20 to-brand-pink/20",
+      image: sensorialImg,
     },
     {
       title: "Zona Multisensorial",
       desc: "Espacio de psicomotricidad y actividades físicas adaptadas.",
-      icon: "🤸",
-      image: "bg-linear-to-br from-brand-brown/20 to-brand-blue/20",
+      icon: "✨",
+      gradient: "bg-linear-to-br from-brand-brown/20 to-brand-blue/20",
+      image: multiSensorialImg,
+      video: "/videos/multi-sensorial.mp4", // We'll move the file to public/videos
     },
   ];
 
@@ -74,6 +87,31 @@ export default function Facilities() {
     return () => observer.disconnect();
   }, []);
 
+  const handleMouseEnter = (
+    e: React.MouseEvent<HTMLDivElement>,
+    hasVideo: boolean,
+  ) => {
+    if (hasVideo) {
+      const video = e.currentTarget.querySelector("video");
+      if (video) {
+        video.play().catch((err) => console.log("Video autoplay failed", err));
+      }
+    }
+  };
+
+  const handleMouseLeave = (
+    e: React.MouseEvent<HTMLDivElement>,
+    hasVideo: boolean,
+  ) => {
+    if (hasVideo) {
+      const video = e.currentTarget.querySelector("video");
+      if (video) {
+        video.pause();
+        video.currentTime = 0;
+      }
+    }
+  };
+
   return (
     <section
       ref={sectionRef}
@@ -104,31 +142,60 @@ export default function Facilities() {
         </div>
 
         {/* Facilities Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mb-24">
+        <div className="flex flex-wrap justify-center gap-8 mb-24">
           {facilities.map((item, idx) => (
             <div
               key={idx}
-              className={`group bg-white rounded-[32px] overflow-hidden shadow-lg shadow-zinc-200/50 hover:shadow-2xl transition-all duration-700 transform border border-zinc-50 ${
+              className={`group bg-white rounded-[32px] overflow-hidden shadow-lg shadow-zinc-200/50 hover:shadow-2xl transition-all duration-700 transform border border-zinc-50 w-full sm:w-[calc(50%-1rem)] lg:w-[calc(33.333%-1.4rem)] ${
                 isVisible
                   ? "opacity-100 translate-y-0"
                   : "opacity-0 translate-y-12"
               }`}
               style={{ transitionDelay: isVisible ? `${idx * 150}ms` : "0ms" }}
+              onMouseEnter={(e) => handleMouseEnter(e, !!item.video)}
+              onMouseLeave={(e) => handleMouseLeave(e, !!item.video)}
             >
               <div
-                className={`relative h-56 ${item.image} flex items-center justify-center text-5xl`}
+                className={`relative h-64 ${!item.image ? item.gradient : ""} flex items-center justify-center text-5xl overflow-hidden`}
               >
-                {/* Placeholder Emoji for image */}
-                <span className="opacity-40 group-hover:scale-125 group-hover:opacity-100 transition-all duration-700">
-                  🧩
-                </span>
+                {/* Image/Video Content */}
+                {item.image && (
+                  <>
+                    <Image
+                      src={item.image}
+                      alt={item.title}
+                      fill
+                      className={`object-cover transition-transform duration-700 ${item.video ? "group-hover:opacity-0" : "group-hover:scale-110"}`}
+                      sizes="(max-width: 768px) 100vw, 33vw"
+                    />
+                    <div className="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-colors duration-500" />
+                  </>
+                )}
+
+                {/* Video Layer */}
+                {item.video && (
+                  <video
+                    src={item.video}
+                    muted
+                    loop
+                    playsInline
+                    className="absolute inset-0 w-full h-full object-cover opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                  />
+                )}
+
+                {/* Placeholder/Icon if no image */}
+                {!item.image && (
+                  <span className="opacity-40 group-hover:scale-125 group-hover:opacity-100 transition-all duration-700">
+                    🧩
+                  </span>
+                )}
 
                 {/* Floating Icon */}
-                <div className="absolute top-4 right-4 w-10 h-10 bg-white rounded-xl shadow-lg flex items-center justify-center text-xl transform translate-y-2 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500">
+                <div className="absolute top-4 right-4 w-12 h-12 bg-white/90 backdrop-blur-sm rounded-2xl shadow-lg flex items-center justify-center text-2xl transform translate-y-2 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500 z-10">
                   {item.icon}
                 </div>
               </div>
-              <div className="p-8">
+              <div className="p-8 relative z-10 bg-white">
                 <h3 className="text-xl font-extrabold text-brand-text mb-3">
                   {item.title}
                 </h3>

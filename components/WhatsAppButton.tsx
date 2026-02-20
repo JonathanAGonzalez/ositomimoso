@@ -4,17 +4,17 @@ import Image from "next/image";
 import whatsappIcon from "@/src/assets/whatsapp.png";
 import posthog from "posthog-js";
 
-export default function WhatsAppButton() {
-  const phoneNumber = "541148725474";
-  const message =
-    "¡Hola! Me gustaría recibir información sobre la Escuela Infantil Osito Mimoso.";
+import { getWhatsAppUrl, WHATSAPP_NUMBER } from "@/src/utils/whatsapp";
 
-  const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+export default function WhatsAppButton() {
+  const whatsappUrl = getWhatsAppUrl(
+    "¡Hola! Me gustaría recibir información sobre la Escuela Infantil Osito Mimoso.",
+  );
 
   const handleClick = () => {
     posthog.capture("whatsapp_click", {
       location: "floating_button",
-      phone_number: phoneNumber,
+      phone_number: WHATSAPP_NUMBER,
     });
   };
 

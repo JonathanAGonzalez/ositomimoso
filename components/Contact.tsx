@@ -4,6 +4,7 @@ import whatsapp from "@/src/assets/whatsapp.png";
 import Image from "next/image";
 import Link from "next/link";
 import posthog from "posthog-js";
+import { getWhatsAppUrl, WHATSAPP_DISPLAY_NUMBER } from "@/src/utils/whatsapp";
 
 export default function Contact() {
   const handleWhatsAppClick = () => {
@@ -21,10 +22,12 @@ export default function Contact() {
     {
       title: "Teléfono",
       desc: "Llámanos de Lunes a Viernes",
-      value: "+54 11 4872-5474",
+      value: WHATSAPP_DISPLAY_NUMBER,
       icon: "📞",
       color: "bg-brand-pink/10",
     },
+    // ... rest of array
+
     {
       title: "Email",
       desc: "Escríbenos cuando quieras",
@@ -109,20 +112,12 @@ export default function Contact() {
                 en persona?
               </h3>
 
-              <p className="text-zinc-500 text-lg md:text-xl leading-relaxed mb-12 max-w-2xl mx-auto">
-                Nada nos hace más felices que recibir a nuevas familias. Agenda
-                una cita para conocer nuestras instalaciones, nuestro equipo y
-                sentir la calidez de{" "}
-                <span className="text-brand-brown font-bold text-base md:text-lg">
-                  Osito Mimoso
-                </span>
-                .
-              </p>
-
-              <div className="flex flex-col sm:flex-row items-center gap-4 mb-12">
+              <div className="flex flex-col sm:flex-row gap-4 pt-4 mb-12">
                 {/* WhatsApp CTA */}
                 <Link
-                  href="https://wa.me/5491148725474?text=¡Hola!%20Me%20gustaría%20agendar%20una%20visita%20para%20conocer%20el%20jardín."
+                  href={getWhatsAppUrl(
+                    "¡Hola! Me gustaría agendar una visita para conocer el jardín.",
+                  )}
                   target="_blank"
                   rel="noopener noreferrer"
                   onClick={handleWhatsAppClick}
