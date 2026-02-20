@@ -50,6 +50,9 @@ export default function Hero() {
         </div> */}
 
         <h1 className="text-4xl md:text-6xl lg:text-7xl font-extrabold text-brand-text leading-tight mb-6">
+          <span className="hidden  text-xl md:text-2xl text-brand-blue font-bold mb-2 tracking-wide uppercase">
+            Jardín de Infantes en Abasto
+          </span>
           El mejor lugar para <br />
           <span className="font-script italic text-brand-blue font-normal">
             aprender

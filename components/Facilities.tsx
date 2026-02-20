@@ -163,7 +163,7 @@ export default function Facilities() {
                   <>
                     <Image
                       src={item.image}
-                      alt={item.title}
+                      alt={`${item.title} - Jardín de Infantes Osito Mimoso`}
                       fill
                       className={`object-cover transition-transform duration-700 ${item.video ? "group-hover:opacity-0" : "group-hover:scale-110"}`}
                       sizes="(max-width: 768px) 100vw, 33vw"

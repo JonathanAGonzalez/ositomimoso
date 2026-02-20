@@ -183,7 +183,7 @@ export default function Gallery() {
               <div className="absolute inset-0 group-hover:scale-110 transition-transform duration-1000">
                 <Image
                   src={photo.image}
-                  alt={photo.title}
+                  alt={`${photo.title} - ${photo.category} en Jardín Osito Mimoso`}
                   fill
                   className="object-cover"
                   sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"

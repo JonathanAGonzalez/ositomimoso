@@ -28,7 +28,7 @@ function MemberCard({
         <div className="relative w-full h-full rounded-[28px] overflow-hidden shadow-lg shadow-zinc-200/50 border-4 border-white group-hover/card:shadow-xl group-hover/card:scale-105 transition-all duration-500 bg-zinc-100">
           <Image
             src={member.image}
-            alt={member.name}
+            alt={`${member.name} - ${member.role} en Osito Mimoso`}
             fill
             className="object-cover object-top"
             placeholder="blur"

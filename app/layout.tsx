@@ -17,24 +17,27 @@ const caveat = Caveat({
 });
 
 export const metadata: Metadata = {
-  title:
-    "Osito Mimoso - Escuela Infantil en CABA | Educación y Cuidado para Niños",
+  title: {
+    template: "%s | Osito Mimoso - Escuela de Infantes en CABA",
+    default:
+      "Osito Mimoso | Escuela de Infantes en Abasto y Almagro - CABA | Maternal y Preescolar",
+  },
   description:
-    "Escuela infantil Osito Mimoso en Buenos Aires. Más de 15 años de experiencia en educación temprana, metodología Montessori, educación bilingüe y atención personalizada para niños de 0 a 6 años.",
+    "Escuela de Infantes y Maternal Osito Mimoso en Abasto, CABA. Educación bilingüe, pedagogía Montessori, espacios de juego y contención para niños de 45 días a 5 años. ¡Vení a conocernos!",
   keywords: [
-    "escuela infantil",
-    "jardín de infantes",
-    "guardería CABA",
-    "educación temprana",
-    "Montessori Buenos Aires",
-    "educación bilingüe",
-    "cuidado infantil",
-    "preescolar Argentina",
+    "jardín de infantes CABA",
+    "jardín maternal Abasto",
+    "escuela infantil Almagro",
+    "guardería en Abasto",
+    "educación temprana Buenos Aires",
+    "jardín bilingüe CABA",
+    "metodología Montessori",
+    "preescolar Abasto",
     "estimulación temprana",
-    "jardín maternal",
+    "cuidado infantil CABA",
     "Osito Mimoso",
-    "educación inicial",
-    "niños 0 a 6 años",
+    "sala de 3 4 y 5 años",
+    "jardín maternal zona abasto",
   ],
   authors: [{ name: "Osito Mimoso" }],
   creator: "Osito Mimoso",
@@ -44,9 +47,9 @@ export const metadata: Metadata = {
     canonical: "/",
   },
   openGraph: {
-    title: "Osito Mimoso - Escuela Infantil en CABA",
+    title: "Osito Mimoso - Escuela de Infantes en CABA",
     description:
-      "Más de 30 años brindando educación de calidad y educación bilingüe. Un espacio donde los niños crecen felices, seguros y amados.",
+      "Educación con amor y excelencia en Abasto. Bilingüe, Montessori y espacios creativos para tu hijo.",
     url: "https://ositomimoso.com.ar",
     siteName: "Osito Mimoso",
     images: [
@@ -54,7 +57,7 @@ export const metadata: Metadata = {
         url: "/logo.png",
         width: 1200,
         height: 630,
-        alt: "Osito Mimoso - Escuela Infantil",
+        alt: "Osito Mimoso - Jardín de Infantes en CABA",
       },
     ],
     locale: "es_AR",
@@ -62,9 +65,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Osito Mimoso - Escuela Infantil en CABA",
+    title: "Osito Mimoso - Escuela de Infantes en CABA",
     description:
-      "Educación temprana de calidad con metodología Montessori y educación bilingüe. Más de 15 años de experiencia.",
+      "Escuela de Infantes y Maternal Osito Mimoso en Abasto. Educación bilingüe y Montessori.",
     images: ["/logo.png"],
   },
   robots: {
@@ -79,7 +82,7 @@ export const metadata: Metadata = {
     },
   },
   verification: {
-    google: "google-site-verification-code-here",
+    // google: "google-site-verification-code-here", // Add verification code when available
   },
 };
 
