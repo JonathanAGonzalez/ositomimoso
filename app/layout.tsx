@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Nunito, Caveat } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import PostHogProvider from "@/components/PostHogProvider";
+import { GoogleAnalytics } from "@next/third-parties/google";
 import "./globals.css";
 
 const nunito = Nunito({
@@ -96,6 +97,7 @@ export default function RootLayout({
       <body
         className={`${nunito.variable} ${caveat.variable} font-sans antialiased`}
       >
+        <GoogleAnalytics gaId="G-6K6716RQFZ" />
         <PostHogProvider
           apiKey={process.env.POSTHOG_KEY || ""}
           apiHost="/ingest"
