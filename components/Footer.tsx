@@ -4,11 +4,17 @@ import React from "react";
 import logo from "@/src/assets/logo.png";
 import Image from "next/image";
 import posthog from "posthog-js";
+import { sendGAEvent } from "@next/third-parties/google";
 
 export default function Footer() {
   const handleContactClick = (contactType: string) => {
     posthog.capture("footer_contact_click", {
       contact_type: contactType,
+    });
+    sendGAEvent({
+      event: "contact_click",
+      contact_type: contactType,
+      cta_description: `Footer - ${contactType}`,
     });
   };
   const socialIcons = [

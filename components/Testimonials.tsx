@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import posthog from "posthog-js";
+import { sendGAEvent } from "@next/third-parties/google";
 import { useEffect, useRef, useState } from "react";
 import { getWhatsAppUrl } from "@/src/utils/whatsapp";
 
@@ -9,6 +10,10 @@ export default function Testimonials() {
   const handleCtaClick = () => {
     posthog.capture("testimonials_cta_click", {
       location: "testimonials_section",
+    });
+    sendGAEvent({
+      event: "cta_click",
+      cta_description: "Testimonials - Agenda tu Visita",
     });
   };
   const testimonials = [

@@ -2,11 +2,16 @@
 
 import posthog from "posthog-js";
 import { getWhatsAppUrl } from "@/src/utils/whatsapp";
+import { sendGAEvent } from "@next/third-parties/google";
 
 export default function Hero() {
   const handleCtaClick = () => {
     posthog.capture("hero_cta_click", {
       button_text: "Quiero conocer la escuela",
+    });
+    sendGAEvent({
+      event: "cta_click",
+      cta_description: "Hero - Quiero conocer la escuela",
     });
     // Scroll to contact section
     document.getElementById("contacto")?.scrollIntoView({ behavior: "smooth" });
@@ -15,6 +20,10 @@ export default function Hero() {
   const handleScheduleVisitClick = () => {
     posthog.capture("hero_schedule_visit_click", {
       button_text: "Agendar una visita",
+    });
+    sendGAEvent({
+      event: "cta_click",
+      cta_description: "Hero - Agendar una visita",
     });
     window.open(
       getWhatsAppUrl(

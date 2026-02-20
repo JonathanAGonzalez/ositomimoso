@@ -5,11 +5,16 @@ import Image from "next/image";
 import Link from "next/link";
 import posthog from "posthog-js";
 import { getWhatsAppUrl, WHATSAPP_DISPLAY_NUMBER } from "@/src/utils/whatsapp";
+import { sendGAEvent } from "@next/third-parties/google";
 
 export default function Contact() {
   const handleWhatsAppClick = () => {
     posthog.capture("schedule_visit_whatsapp_click", {
       location: "contact_section",
+    });
+    sendGAEvent({
+      event: "cta_click",
+      cta_description: "Contact - Agenda tu visita presencial",
     });
   };
 

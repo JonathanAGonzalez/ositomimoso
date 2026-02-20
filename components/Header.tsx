@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useState, useEffect, useRef } from "react";
 import logo from "@/src/assets/logo.png";
 import posthog from "posthog-js";
+import { sendGAEvent } from "@next/third-parties/google";
 
 export default function Header() {
   const [active, setActive] = useState("Inicio");
@@ -37,6 +38,10 @@ export default function Header() {
     setActive(item);
     posthog.capture("navigation_click", {
       section: item,
+    });
+    sendGAEvent({
+      event: "nav_click",
+      section_name: item,
     });
     // Disable intersection observer while we scroll to the clicked section
     isManualScroll.current = true;
@@ -140,6 +145,10 @@ export default function Header() {
   const toggleMenu = () => {
     if (!isOpen) {
       posthog.capture("mobile_menu_opened");
+      sendGAEvent({
+        event: "mobile_menu_open",
+        cta_description: "Header - Mobile Menu Open",
+      });
     }
     setIsOpen(!isOpen);
   };

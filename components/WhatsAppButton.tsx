@@ -3,6 +3,7 @@
 import Image from "next/image";
 import whatsappIcon from "@/src/assets/whatsapp.png";
 import posthog from "posthog-js";
+import { sendGAEvent } from "@next/third-parties/google";
 
 import { getWhatsAppUrl, WHATSAPP_NUMBER } from "@/src/utils/whatsapp";
 
@@ -15,6 +16,10 @@ export default function WhatsAppButton() {
     posthog.capture("whatsapp_click", {
       location: "floating_button",
       phone_number: WHATSAPP_NUMBER,
+    });
+    sendGAEvent({
+      event: "cta_click",
+      cta_description: "Floating WhatsApp - ¿Consultas? ¡Escríbenos!",
     });
   };
 
