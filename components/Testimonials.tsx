@@ -26,7 +26,7 @@ export default function Testimonials() {
     },
     {
       text: "Hermoso jardín, un lugar lleno de juegos, en dónde los niños/as aprenden jugando y nos dejan una huella en nuestros corazones.",
-      author: "Usuario de Google",
+      author: "Valeria Noemi Barrionuevo",
       child: "Hace 11 meses",
       stars: 5,
     },
