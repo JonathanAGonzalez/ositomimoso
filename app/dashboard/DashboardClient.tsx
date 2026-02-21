@@ -12,6 +12,7 @@ import MessageBubble from "./components/MessageBubble";
 import MessageInput from "./components/MessageInput";
 import EmptyState from "./components/EmptyState";
 import ConfirmDeleteModal from "./components/ConfirmDeleteModal";
+import StatsCards from "./components/StatsCards";
 import type { Message } from "./types";
 
 export default function DashboardClient({ user }: { user: User }) {
@@ -25,20 +26,26 @@ export default function DashboardClient({ user }: { user: User }) {
   const [showSidebar, setShowSidebar] = useState(true);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [deleting, setDeleting] = useState(false);
+  const [loadingMessages, setLoadingMessages] = useState(false);
+  const [loadingConv, setLoadingConv] = useState(true);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   // ─── Data fetching ──────────────────────────────────
-  const fetchConversations = useCallback(async () => {
+  const fetchConversations = useCallback(async (isInitial = false) => {
+    if (isInitial) setLoadingConv(true);
     try {
       const res = await fetch("/api/dashboard/conversations");
       const data = await res.json();
       setConversations(data.conversations || []);
     } catch (err) {
       console.error("Error cargando conversaciones:", err);
+    } finally {
+      if (isInitial) setLoadingConv(false);
     }
   }, []);
 
-  const fetchMessages = useCallback(async (id: string) => {
+  const fetchMessages = useCallback(async (id: string, isInitial = false) => {
+    if (isInitial) setLoadingMessages(true);
     try {
       const res = await fetch(`/api/dashboard/conversations/${id}/messages`);
       const data = await res.json();
@@ -46,20 +53,25 @@ export default function DashboardClient({ user }: { user: User }) {
       setSelectedConv(data.conversation || null);
     } catch (err) {
       console.error("Error cargando mensajes:", err);
+    } finally {
+      if (isInitial) setLoadingMessages(false);
     }
   }, []);
 
   // ─── Polling ────────────────────────────────────────
   useEffect(() => {
-    fetchConversations();
-    const id = setInterval(fetchConversations, POLL_INTERVAL_MS);
+    fetchConversations(true);
+    const id = setInterval(() => fetchConversations(false), POLL_INTERVAL_MS);
     return () => clearInterval(id);
   }, [fetchConversations]);
 
   useEffect(() => {
     if (!selectedId) return;
-    fetchMessages(selectedId);
-    const id = setInterval(() => fetchMessages(selectedId), POLL_INTERVAL_MS);
+    fetchMessages(selectedId, true);
+    const id = setInterval(
+      () => fetchMessages(selectedId, false),
+      POLL_INTERVAL_MS,
+    );
     return () => clearInterval(id);
   }, [selectedId, fetchMessages]);
 
@@ -153,7 +165,16 @@ export default function DashboardClient({ user }: { user: User }) {
       >
         <SidebarHeader user={user} />
         <div className="flex-1 overflow-y-auto">
-          {conversations.length === 0 ? (
+          {loadingConv ? (
+            <div className="flex flex-col gap-1 p-2">
+              {[...Array(5)].map((_, i) => (
+                <div
+                  key={i}
+                  className="h-[72px] bg-dash-surface border border-dash-border/50 rounded-lg animate-pulse"
+                />
+              ))}
+            </div>
+          ) : conversations.length === 0 ? (
             <div className="px-4 py-10 text-center text-dash-muted">
               <p className="text-[32px] mb-2">💬</p>
               <p className="text-sm">No hay conversaciones aún</p>
@@ -173,6 +194,7 @@ export default function DashboardClient({ user }: { user: User }) {
 
       {/* Chat area */}
       <main className="flex-1 flex flex-col min-w-0">
+        <StatsCards />
         {!selectedId ? (
           <EmptyState />
         ) : (
@@ -187,10 +209,32 @@ export default function DashboardClient({ user }: { user: User }) {
 
             {/* Messages */}
             <div className="flex-1 overflow-y-auto p-4 flex flex-col gap-2">
-              {messages.map((msg) => (
-                <MessageBubble key={msg._id} msg={msg} />
-              ))}
-              <div ref={messagesEndRef} />
+              {loadingMessages ? (
+                // Message Skeleton
+                <>
+                  {[...Array(6)].map((_, i) => (
+                    <div
+                      key={i}
+                      className={`flex ${i % 2 === 0 ? "justify-start" : "justify-end"} animate-pulse`}
+                    >
+                      <div
+                        className={`max-w-[70%] h-12 rounded-2xl ${
+                          i % 2 === 0
+                            ? "w-48 bg-dash-surface border border-dash-border rounded-tl-none"
+                            : "w-64 bg-dash-accent/20 border border-dash-accent/30 rounded-tr-none"
+                        }`}
+                      />
+                    </div>
+                  ))}
+                </>
+              ) : (
+                <>
+                  {messages.map((msg) => (
+                    <MessageBubble key={msg._id} msg={msg} />
+                  ))}
+                  <div ref={messagesEndRef} />
+                </>
+              )}
             </div>
 
             <MessageInput
