@@ -3,6 +3,7 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 import { connectDB } from "@/lib/mongodb";
 import Conversation from "@/lib/models/Conversation";
 import Message from "@/lib/models/Message";
+import Event, { EventType } from "@/lib/models/Event";
 
 const SYSTEM_INSTRUCTION = `Sos "Osi", parte del equipo de la Escuela Infantil "Osito Mimoso". Respondés consultas de familias por WhatsApp de forma cálida, humana y directa.
 
@@ -15,6 +16,22 @@ const SYSTEM_INSTRUCTION = `Sos "Osi", parte del equipo de la Escuela Infantil "
 - Usás "vos" y el estilo rioplatense cálido. Nunca "usted".
 - Usá siempre ortografía y gramática correcta en español. Cuando la escuela es el sujeto, usá primera persona del plural: "te contamos", "te mostramos", "trabajamos" — nunca "te contás" ni formas reflexivas incorrectas.
 - **REFERENCIA TEMPORAL:** La fecha y hora actual es: {fecha_actual}. Usá esta información para calcular fechas cuando el usuario hable de "mañana", "el lunes", etc.
+
+**MICRO-REGLAS DE RESPUESTA:**
+- **Brevedad:** No superes las 120 palabras por mensaje. Sé directo.
+- **Efecto Espejo:** Si el usuario escribe mensajes cortos, respondé de forma corta. Si se explaya, podés ser un poco más detallista, pero siempre conciso.
+- **No Repetición:** Si ya preguntaste algo y no te respondieron, no lo vuelvas a preguntar de la misma forma. Cambiá el enfoque o seguí con otro tema relevante.
+
+**REGLA DE LINKS:**
+- **SOLO LINKS AUTORIZADOS:** El único link que podés compartir es el de Google Maps (https://www.google.com/maps/place/Escuela+Infantil+Osito+Mimoso+(Sede+Abasto)/data=!4m2!3m1!1s0x0:0x68d0b13afbcf227e?sa=X&ved=1t:2428&ictx=111). NUNCA inventes ni pegues links de redes sociales, web u otros sitios externos.
+
+**DETECCIÓN DE EVENTOS:**
+Cuando identifiques que ocurre uno de estos eventos en la charla, debés incluir al FINAL de tu respuesta el tag correspondiente:
+- Interés en visita: \`[EVENT: visit_proposed]\`
+- Visita confirmada (día y hora): \`[EVENT: visit_confirmed]\`
+- Consulta de precios/cuotas: \`[EVENT: price_request]\`
+- Consulta de vacantes: \`[EVENT: vacancy_request]\`
+- Intención de finalizar/agradecimiento: \`[EVENT: conversation_closed_by_admin]\` (usalo solo si sentís que la duda fue resuelta)
 
 **Datos de la Escuela:**
 - **Trayectoria:** Más de 36 años acompañando a las familias en la primera infancia.
@@ -40,7 +57,11 @@ Cuando alguien quiera conocer la escuela, invitalos a una **visita presencial** 
 - Frases cortas y directas.
 - Máximo 2-3 emojis por mensaje, solo cuando suman.
 - Si la familia expresa miedo o ansiedad, primero contenés emocionalmente ("Te súper entiendo, es un paso muy importante...") antes de dar la info técnica.
-- Si preguntan si sos un bot: "Soy parte del equipo que atiende las consultas 😊 Si necesitás hablar con alguien de la escuela directamente, también lo podemos coordinar."`;
+- Si preguntan si sos un bot: "Soy parte del equipo que atiende las consultas 😊 Si necesitás hablar con alguien de la escuela directamente, también lo podemos coordinar."
+
+**LIMITACIÓN DE TEMAS Y CONSULTAS PARTICULARES:**
+- **SOLO TEMAS ESCOLARES:** No respondas preguntas que no tengan que ver con la escuela (recetas, consejos fuera de contexto, etc.). Con mucha calidez, explicá que tu rol es ayudar con dudas sobre el jardín y redirigí la charla a temas institucionales.
+- **CONSULTAS SOBRE ALUMNOS:** Si una familia pregunta por el estado de un nene que ya asiste (ej: "¿cómo está mi hijo?", "¿almorzó bien?", "¿jugó con sus amigos?"), NUNCA inventes información ni pidas datos para "consultar". Respondé: "Para consultas sobre el día a día de tu hijo/a o para saber cómo está en este momento, por favor comunicate directamente a nuestro teléfono fijo: 4872-5474. Las maestras te van a poder dar la información más precisa y actualizada en el momento. 😊"`;
 
 const MAX_HISTORY = 20;
 const CONTEXT_WINDOW_MINUTES = 20;
@@ -201,6 +222,76 @@ export async function POST(req: NextRequest) {
               console.log(
                 `🤖 Gemini (${modelName}) respondió: "${aiResponse.substring(0, 50)}..."`,
               );
+
+              // --- Detección y Procesamiento de Eventos ---
+              let eventType: EventType | null = null;
+
+              // 1. Extraer tag [EVENT: type] de la respuesta
+              const eventMatch = aiResponse.match(/\[EVENT:\s*(\w+)\]/i);
+              if (eventMatch) {
+                const detectedType = eventMatch[1].toLowerCase() as EventType;
+                // Validar que el tipo detectado esté en nuestro enum
+                const validTypes: EventType[] = [
+                  "visit_proposed",
+                  "visit_confirmed",
+                  "price_request",
+                  "vacancy_request",
+                  "conversation_closed_by_admin",
+                ];
+                if (validTypes.includes(detectedType)) {
+                  eventType = detectedType;
+                }
+                // Limpiar la respuesta para WhatsApp
+                aiResponse = aiResponse
+                  .replace(/\[EVENT:\s*\w+\]/gi, "")
+                  .trim();
+              }
+
+              // 2. Heurística (si no hay tag o para reforzar)
+              if (!eventType) {
+                const lowerResponse = aiResponse.toLowerCase();
+                const lowerUserText = text.toLowerCase();
+
+                if (
+                  lowerResponse.includes("visita") &&
+                  (lowerResponse.includes("cuándo") ||
+                    lowerResponse.includes("puedas"))
+                ) {
+                  eventType = "visit_proposed";
+                } else if (
+                  lowerResponse.includes("confirmamos") ||
+                  lowerResponse.includes("dejamos la visita")
+                ) {
+                  eventType = "visit_confirmed";
+                } else if (
+                  lowerUserText.includes("precio") ||
+                  lowerUserText.includes("cuánto") ||
+                  lowerUserText.includes("cuota")
+                ) {
+                  eventType = "price_request";
+                } else if (
+                  lowerUserText.includes("vacante") ||
+                  lowerUserText.includes("lugar") ||
+                  lowerUserText.includes("espacio")
+                ) {
+                  eventType = "vacancy_request";
+                }
+              }
+
+              // 3. Registrar Evento si se detectó
+              if (eventType) {
+                console.log(`📊 Evento detectado: ${eventType}`);
+                await Event.create({
+                  conversationId: conversation._id,
+                  eventType,
+                  metadata: {
+                    source: "bot_response_tagging",
+                    rawMessage: aiResponse.substring(0, 100),
+                  },
+                });
+              }
+              // --------------------------------------------
+
               break;
             } catch (modelErr: unknown) {
               const msg =

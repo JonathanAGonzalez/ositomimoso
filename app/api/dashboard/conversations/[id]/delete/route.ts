@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { connectDB } from "@/lib/mongodb";
 import Conversation from "@/lib/models/Conversation";
+import Event from "@/lib/models/Event";
 
 export async function DELETE(
   _req: Request,
@@ -15,6 +16,16 @@ export async function DELETE(
       { archived: true },
       { new: true },
     );
+
+    if (conversation) {
+      await Event.create({
+        conversationId: conversation._id,
+        eventType: "conversation_closed_by_admin",
+        metadata: {
+          source: "dashboard_archive",
+        },
+      });
+    }
 
     if (!conversation) {
       return NextResponse.json(
