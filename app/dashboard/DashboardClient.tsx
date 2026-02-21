@@ -28,7 +28,9 @@ export default function DashboardClient({ user }: { user: User }) {
   const [deleting, setDeleting] = useState(false);
   const [loadingMessages, setLoadingMessages] = useState(false);
   const [loadingConv, setLoadingConv] = useState(true);
+  const [autoScroll, setAutoScroll] = useState(true);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   // ─── Data fetching ──────────────────────────────────
   const fetchConversations = useCallback(async (isInitial = false) => {
@@ -65,8 +67,18 @@ export default function DashboardClient({ user }: { user: User }) {
     return () => clearInterval(id);
   }, [fetchConversations]);
 
+  const handleScroll = () => {
+    if (!scrollContainerRef.current) return;
+    const { scrollTop, scrollHeight, clientHeight } =
+      scrollContainerRef.current;
+    // Check if user is near bottom (within 100px)
+    const nearBottom = scrollHeight - scrollTop - clientHeight < 100;
+    setAutoScroll(nearBottom);
+  };
+
   useEffect(() => {
     if (!selectedId) return;
+    setAutoScroll(true); // Reset auto-scroll when changing chat
     fetchMessages(selectedId, true);
     const id = setInterval(
       () => fetchMessages(selectedId, false),
@@ -76,8 +88,10 @@ export default function DashboardClient({ user }: { user: User }) {
   }, [selectedId, fetchMessages]);
 
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages]);
+    if (autoScroll) {
+      messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [messages, autoScroll]);
 
   // ─── Handlers ───────────────────────────────────────
   const handleSelectConversation = (conv: Conversation) => {
@@ -208,7 +222,11 @@ export default function DashboardClient({ user }: { user: User }) {
             />
 
             {/* Messages */}
-            <div className="flex-1 overflow-y-auto p-4 flex flex-col gap-2">
+            <div
+              ref={scrollContainerRef}
+              onScroll={handleScroll}
+              className="flex-1 overflow-y-auto p-4 flex flex-col gap-2"
+            >
               {loadingMessages ? (
                 // Message Skeleton
                 <>

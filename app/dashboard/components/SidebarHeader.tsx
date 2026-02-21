@@ -19,7 +19,7 @@ export default function SidebarHeader({ user }: { user: User }) {
         </span>
         <button
           onClick={() => signOut({ callbackUrl: "/login" })}
-          className="ml-2 shrink-0 rounded-lg border border-dash-input-border bg-transparent px-2.5 py-1 text-[11px] text-dash-muted cursor-pointer transition-colors hover:text-dash-danger-light hover:border-dash-danger/40"
+          className="rounded-lg border border-dash-input-border bg-transparent px-2.5 py-1 text-[11px] text-dash-muted cursor-pointer transition-colors hover:text-dash-danger-light hover:border-dash-danger/40"
         >
           Salir
         </button>

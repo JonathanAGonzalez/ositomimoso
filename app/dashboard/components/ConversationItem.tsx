@@ -34,19 +34,21 @@ export default function ConversationItem({
             {formatDate(conv.lastMessageAt)}
           </span>
         </div>
-        <div className="flex items-center gap-1.5 mt-1">
-          <span
-            className={`text-[10px] px-1.5 py-0.5 rounded-lg font-semibold ${
-              conv.botActive
-                ? "bg-dash-accent/20 text-dash-accent-light"
-                : "bg-dash-danger/20 text-dash-danger-light"
-            }`}
-          >
-            {conv.botActive ? "🤖 Bot" : "👤 Humano"}
-          </span>
-          <span className="text-[11px] text-dash-muted">
-            {conv.phoneNumber}
-          </span>
+        <div className="flex items-center justify-between mt-1">
+          <div className="flex items-center gap-1.5 ">
+            <span
+              className={`text-[10px] px-1.5 py-0.5 rounded-lg font-semibold ${
+                conv.botActive
+                  ? "bg-dash-accent/20 text-dash-accent-light"
+                  : "bg-dash-danger/20 text-dash-danger-light"
+              }`}
+            >
+              {conv.botActive ? "🤖 Bot" : "👤 Humano"}
+            </span>
+            <span className="text-[11px] text-dash-muted">
+              {conv.phoneNumber}
+            </span>
+          </div>
         </div>
       </div>
     </button>

@@ -278,17 +278,23 @@ export async function POST(req: NextRequest) {
                 }
               }
 
-              // 3. Registrar Evento si se detectó
+              // 3. Registrar Evento si se detectó (1 por chat para evitar duplicados en métricas)
               if (eventType) {
                 console.log(`📊 Evento detectado: ${eventType}`);
-                await Event.create({
-                  conversationId: conversation._id,
-                  eventType,
-                  metadata: {
-                    source: "bot_response_tagging",
-                    rawMessage: aiResponse.substring(0, 100),
+                await Event.findOneAndUpdate(
+                  { conversationId: conversation._id, eventType },
+                  {
+                    $setOnInsert: { timestamp: new Date() },
+                    $set: {
+                      metadata: {
+                        source: "bot_response_tagging",
+                        rawMessage: aiResponse.substring(0, 100),
+                        updatedAt: new Date(),
+                      },
+                    },
                   },
-                });
+                  { upsert: true, new: true },
+                );
               }
               // --------------------------------------------
 
