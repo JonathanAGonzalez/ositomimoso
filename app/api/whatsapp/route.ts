@@ -97,19 +97,32 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({ status: "status update ignored" });
       }
 
-      const message = value?.messages?.[0];
-      const contactName = value?.contacts?.[0]?.profile?.name || "";
+      const messages = value?.messages || [];
+      const contacts = value?.contacts || [];
 
-      if (message?.type === "text") {
+      // Procesar cada mensaje en el batch (aunque usualmente sea uno)
+      for (const message of messages) {
+        if (message?.type !== "text") {
+          console.log("⚠️ Tipo de mensaje no soportado:", message?.type);
+          continue;
+        }
+
         const from = message.from;
         const text = message.text.body;
         const whatsappMessageId = message.id;
 
+        // BUSCAR EL NOMBRE CORRECTO: Buscar el contacto que coincida con el remitente (wa_id)
+        // Esto evita que en batches se asigne el nombre de una persona al mensaje de otra.
+        const contact = contacts.find(
+          (c: { wa_id: string }) => c.wa_id === from,
+        );
+        const currentContactName = contact?.profile?.name || "";
+
         console.log(
-          `👤 Nombre del contacto (perfil WhatsApp): "${contactName}"`,
+          `👤 Nombre del contacto (perfil WhatsApp): "${currentContactName}"`,
         );
         console.log(
-          `💬 Procesando mensaje de ${contactName || from}: "${text}"`,
+          `💬 Procesando mensaje de ${currentContactName || from}: "${text}"`,
         );
 
         try {
@@ -121,25 +134,41 @@ export async function POST(req: NextRequest) {
 
           // Buscar o crear conversación en MongoDB
           let conversation = await Conversation.findOne({ phoneNumber: from });
+
+          // El nombre efectivo es: primero lo que viene de WhatsApp ahora, sino lo que ya teníamos en DB
+          const effectiveName =
+            currentContactName || conversation?.contactName || "";
+
           if (!conversation) {
             conversation = await Conversation.create({
               phoneNumber: from,
-              contactName: contactName || "",
+              contactName: effectiveName,
               botActive: true,
               lastMessageAt: new Date(),
             });
             console.log(`📝 Nueva conversación creada para ${from}`);
           } else {
-            // Actualizar nombre si cambió, fecha del último mensaje,
-            // y desarchivar si estaba archivada (nuevo mensaje = conversación activa)
-            await Conversation.updateOne(
-              { _id: conversation._id },
-              {
-                contactName: contactName || conversation.contactName,
-                lastMessageAt: new Date(),
-                archived: false,
-              },
-            );
+            // Actualizar nombre si cambió o se obtuvo uno nuevo por perfil de usuario
+            const updateData: {
+              lastMessageAt: Date;
+              archived: boolean;
+              contactName?: string;
+            } = {
+              lastMessageAt: new Date(),
+              archived: false,
+            };
+
+            if (
+              currentContactName &&
+              currentContactName !== conversation.contactName
+            ) {
+              updateData.contactName = currentContactName;
+            }
+
+            await Conversation.updateOne({ _id: conversation._id }, updateData);
+            // Actualizar el objeto en memoria
+            if (updateData.contactName)
+              conversation.contactName = updateData.contactName;
           }
 
           // Guardar mensaje del usuario en MongoDB
@@ -181,7 +210,9 @@ export async function POST(req: NextRequest) {
               parts: [{ text: m.text }],
             }));
 
-          console.log("🧠 Consultando a Gemini...");
+          console.log(
+            `🧠 Consultando a Gemini para "${effectiveName || from}"...`,
+          );
           const apiKey = process.env.GEMINI_API_KEY?.trim();
           if (!apiKey) throw new Error("GEMINI_API_KEY no configurada");
 
@@ -201,14 +232,29 @@ export async function POST(req: NextRequest) {
                 minute: "2-digit",
               });
 
-              let personalizedInstruction = contactName
-                ? SYSTEM_INSTRUCTION.replace("{nombre}", contactName)
-                : SYSTEM_INSTRUCTION.replace("¡Hola, {nombre}!", "¡Hola!");
+              // Usar effectiveName (el perfil de WhatsApp o lo guardado en DB)
+              let personalizedInstruction = effectiveName
+                ? SYSTEM_INSTRUCTION.replace("{nombre}", effectiveName)
+                : SYSTEM_INSTRUCTION.replace(
+                    "¡Hola, {nombre}!",
+                    "¡Hola!",
+                  ).replace(
+                    "saludá usando el nombre de la persona (disponible en **Nombre de la persona** al final de este prompt).",
+                    "Como no sabés el nombre de la persona, saludá cordialmente sin usar ningún nombre.",
+                  );
 
               personalizedInstruction = personalizedInstruction.replace(
                 "{fecha_actual}",
                 now,
               );
+
+              // Asegurar que el nombre esté explícitamente al final como espera la instrucción
+              // Esto le da una fuente de verdad clara a la IA.
+              if (effectiveName) {
+                personalizedInstruction += `\n\n**Nombre de la persona**: ${effectiveName}`;
+              } else {
+                personalizedInstruction += `\n\n**Nombre de la persona**: Desconocido`;
+              }
 
               const model = genAI.getGenerativeModel({
                 model: modelName,
@@ -323,8 +369,6 @@ export async function POST(req: NextRequest) {
             aiError instanceof Error ? aiError.message : String(aiError);
           console.error("❌ Error procesando mensaje:", msg);
         }
-      } else {
-        console.log("⚠️ Tipo de mensaje no soportado:", message?.type);
       }
 
       return NextResponse.json({ status: "success" });
