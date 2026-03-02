@@ -32,8 +32,8 @@ export default function Footer() {
     },
     {
       icon: "✉️",
-      text: "info@ositomimoso.com.ar",
-      href: "mailto:info@ositomimoso.com.ar",
+      text: "Jardinositomimoso@hotmail.com",
+      href: "mailto:Jardinositomimoso@hotmail.com",
       type: "email",
     },
     {
