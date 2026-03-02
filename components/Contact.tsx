@@ -36,7 +36,7 @@ export default function Contact() {
     {
       title: "Email",
       desc: "Escríbenos cuando quieras",
-      value: "info@ositomimoso.com",
+      value: "Jardinositomimoso@hotmail.com",
       icon: "✉️",
       color: "bg-brand-blue/10",
     },
