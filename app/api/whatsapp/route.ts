@@ -106,6 +106,13 @@ export async function POST(req: NextRequest) {
           // Conectar a MongoDB
           await connectDB();
 
+          // Deduplicar: ignorar si ya procesamos este mensaje exacto
+          const alreadyProcessed = await Message.findOne({ whatsappMessageId });
+          if (alreadyProcessed) {
+            console.log(`⏭️ Mensaje duplicado ignorado: ${whatsappMessageId}`);
+            continue;
+          }
+
           // Marcar como leído (ticks azules)
           await markAsRead(whatsappMessageId);
 
@@ -194,7 +201,12 @@ export async function POST(req: NextRequest) {
           if (!apiKey) throw new Error("GEMINI_API_KEY no configurada");
 
           const genAI = new GoogleGenerativeAI(apiKey);
-          const modelNames = ["gemini-2.0-flash", "gemini-2.0-flash-lite"];
+          const modelNames = [
+            "gemini-2.0-flash",
+            "gemini-2.0-flash-lite",
+            "gemini-1.5-flash",
+            "gemini-1.5-flash-8b",
+          ];
           let aiResponse = "";
 
           for (const modelName of modelNames) {
@@ -315,11 +327,24 @@ export async function POST(req: NextRequest) {
             } catch (modelErr: unknown) {
               const msg =
                 modelErr instanceof Error ? modelErr.message : String(modelErr);
-              console.warn(`⚠️ Falló ${modelName}: ${msg}`);
+              const status = (modelErr as { status?: number })?.status;
+              console.warn(`⚠️ Falló ${modelName} [status=${status ?? "?"}]: ${msg}`);
             }
           }
 
-          if (!aiResponse) throw new Error("Gemini no devolvió texto");
+          if (!aiResponse) {
+            const fallback =
+              "Hola! 👋 Gracias por escribirnos. En este momento estoy teniendo problemas técnicos para responderte. Por favor comunicate directamente al 4872-5474 y con gusto te ayudamos. ¡Disculpá las molestias!";
+            console.warn("⚠️ Todos los modelos fallaron. Enviando respuesta de fallback.");
+            await sendWhatsAppMessage(from, fallback);
+            await Message.create({
+              conversationId: conversation._id,
+              role: "bot",
+              text: fallback,
+              timestamp: new Date(),
+            });
+            continue;
+          }
 
           // Guardar respuesta del bot en MongoDB
           await Message.create({
